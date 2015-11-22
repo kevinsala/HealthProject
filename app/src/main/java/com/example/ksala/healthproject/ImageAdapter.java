@@ -13,6 +13,13 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter
 {
     private Context context;
+    private static final int resID []= {
+            R.mipmap.ecg,
+            R.mipmap.lungcapacity,
+            R.mipmap.bloodpressure,
+            R.mipmap.temperature,
+            R.mipmap.respiratoryrate,
+            R.mipmap.o2saturation };
 
     public ImageAdapter(Context c)
     {
@@ -41,11 +48,11 @@ public class ImageAdapter extends BaseAdapter
             imageView = new ImageView(context);
             imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(5, 5, 5, 5);
+            //imageView.setPadding(50, 50, 50, 50);
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(R.mipmap.ic_launcher);
+        imageView.setImageResource(resID[position]);
         return imageView;
     }
 }

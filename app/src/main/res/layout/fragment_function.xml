@@ -14,7 +14,7 @@
         android:id="@+id/functionalitiesTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin"
+        android:padding="10dp"
         android:text="@string/functionalities"
         android:gravity="center"
         android:textSize="20sp"/>
@@ -24,6 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:verticalSpacing="40dp"
+        android:horizontalSpacing="40dp"
         android:gravity="center"
         android:numColumns="2">
     </GridView>

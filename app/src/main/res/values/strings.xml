@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ProjectePEC</string>
     <string name="functionalities">Functionalities</string>
-    <string name="electroFunc">Electrocardio</string>
+    <string name="electroFunc">Electrocardiogram</string>
     <string name="oxySatFunc">Oxygen Saturation</string>
     <string name="lungCapFunc">Lung Capacity</string>
     <string name="respRateFunc">Respiratory Rate</string>
