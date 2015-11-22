@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">HealthProject</string>
+    <string name="app_name">ProjectePEC</string>
+    <string name="functionalities">Functionalities</string>
+    <string name="electroFunc">Electrocardio</string>
+    <string name="oxySatFunc">Oxygen Saturation</string>
+    <string name="lungCapFunc">Lung Capacity</string>
+    <string name="respRateFunc">Respiratory Rate</string>
+    <string name="bloodPresFunc">Blood Pressure</string>
+    <string name="bodyTempFunc">Body Temperature</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
