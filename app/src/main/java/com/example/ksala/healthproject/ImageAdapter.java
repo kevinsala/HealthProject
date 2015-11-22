@@ -13,13 +13,6 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter
 {
     private Context context;
-    private static final int resID []= {
-            R.mipmap.ecg,
-            R.mipmap.lungcapacity,
-            R.mipmap.bloodpressure,
-            R.mipmap.temperature,
-            R.mipmap.respiratoryrate,
-            R.mipmap.o2saturation };
 
     public ImageAdapter(Context c)
     {
@@ -52,7 +45,7 @@ public class ImageAdapter extends BaseAdapter
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(resID[position]);
+        imageView.setImageResource(Utils.medicalIcons[position]);
         return imageView;
     }
 }

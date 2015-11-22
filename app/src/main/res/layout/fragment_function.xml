@@ -10,15 +10,6 @@
     android:paddingTop="@dimen/margin"
     android:paddingBottom="@dimen/margin">
 
-    <TextView
-        android:id="@+id/functionalitiesTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/functionalities"
-        android:gravity="center"
-        android:textSize="20sp"/>
-
     <GridView
         android:id="@+id/functionGridView"
         android:layout_width="match_parent"
@@ -27,6 +18,5 @@
         android:verticalSpacing="40dp"
         android:horizontalSpacing="40dp"
         android:gravity="center"
-        android:numColumns="2">
-    </GridView>
+        android:numColumns="2"/>
 </LinearLayout>

@@ -55,7 +55,7 @@ public class FunctionFragment extends AbstractFragment implements AdapterView.On
                 page = 0;
                 break;
             case 5:
-                page = 5;
+                page = 6;
                 break;
         }
 

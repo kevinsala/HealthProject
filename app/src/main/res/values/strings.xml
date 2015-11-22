@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">ProjectePEC</string>
-    <string name="functionalities">Functionalities</string>
-    <string name="electroFunc">Electrocardiogram</string>
-    <string name="oxySatFunc">Oxygen Saturation</string>
-    <string name="lungCapFunc">Lung Capacity</string>
-    <string name="respRateFunc">Respiratory Rate</string>
-    <string name="bloodPresFunc">Blood Pressure</string>
-    <string name="bodyTempFunc">Body Temperature</string>
+    <string name="app_name">HealthProject</string>
+    <string name="menu">Menu</string>
+    <string name="ecg">ECG</string>
+    <string name="o2saturation">Oxygen Saturation</string>
+    <string name="lungcapacity">Lung Capacity</string>
+    <string name="respiratoryrate">Respiratory Rate</string>
+    <string name="bloodpressure">Blood Pressure</string>
+    <string name="temperature">Temperature</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

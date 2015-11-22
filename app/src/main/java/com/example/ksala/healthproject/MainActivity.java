@@ -10,10 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import java.util.Set;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(pagerAdapter);
         setCurrentPage(MAIN_PAGE);
+        ((PagerTitleStrip) findViewById(R.id.pagerTitleStrip)).setTextSpacing(540);
+        ((PagerTitleStrip) findViewById(R.id.pagerTitleStrip)).setGravity(Gravity.CENTER);
     }
 
 
@@ -166,6 +170,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return NUM_PAGES;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return getResources().getString(Utils.medicalNames[position]);
         }
     }
 }
