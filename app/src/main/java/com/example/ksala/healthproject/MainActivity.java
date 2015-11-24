@@ -16,8 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.AdapterView;
+
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,15 +24,13 @@ public class MainActivity extends AppCompatActivity {
     /* View Pager attributes */
     private static final int NUM_PAGES = 7;
     private static final int MAIN_PAGE = 3;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private AbstractFragment fragments[];
 
     /* Bluetooth attributes */
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice bluetoothDevice = null;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         /* View pager configuration */
         configurePages();
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (CustomViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(pagerAdapter);
         setCurrentPage(MAIN_PAGE);
         ((PagerTitleStrip) findViewById(R.id.pagerTitleStrip)).setTextSpacing(540);
@@ -129,15 +126,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public void setSwipeable(boolean swipeable) {
+        viewPager.setSwipeable(swipeable);
+    }
+
     private void configurePages() {
         fragments = new AbstractFragment[NUM_PAGES];
-        fragments[0] = new DummyFragment();
-        fragments[1] = new DummyFragment();
-        fragments[2] = new DummyFragment();
+        fragments[0] = new CommonFragment();
+        fragments[1] = new CommonFragment();
+        fragments[2] = new CommonFragment();
         fragments[3] = new FunctionFragment();
-        fragments[4] = new DummyFragment();
-        fragments[5] = new DummyFragment();
-        fragments[6] = new DummyFragment();
+        fragments[4] = new CommonFragment();
+        fragments[5] = new CommonFragment();
+        fragments[6] = new CommonFragment();
     }
 
     public int getCurrentPage() {
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         if (getCurrentPage() == MAIN_PAGE)
             super.onBackPressed();
         else {
+            setSwipeable(true);
             setCurrentPage(MAIN_PAGE);
         }
     }

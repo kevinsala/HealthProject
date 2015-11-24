@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HealthProject</string>
-    <string name="menu">Menu</string>
+
     <string name="ecg">ECG</string>
     <string name="o2saturation">Oxygen Saturation</string>
     <string name="lungcapacity">Lung Capacity</string>
@@ -8,4 +8,7 @@
     <string name="bloodpressure">Blood Pressure</string>
     <string name="temperature">Temperature</string>
     <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="menu">Menu</string>
+    <string name="restart">Restart</string>
 </resources>
