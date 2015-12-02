@@ -1,10 +1,12 @@
-package com.example.ksala.healthproject;
+package com.example.ksala.healthproject.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.ksala.healthproject.Activities.MainActivity;
 
 /**
  * Created by kevin on 22/11/2015.

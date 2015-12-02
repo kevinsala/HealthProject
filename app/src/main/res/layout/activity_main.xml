@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.example.ksala.healthproject.CustomViewPager
+    <com.example.ksala.healthproject.Views.CustomViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,6 +19,6 @@
             android:textColor="#fff"
             android:textSize="17sp"
             android:paddingBottom="4dp" />
-    </com.example.ksala.healthproject.CustomViewPager>
+    </com.example.ksala.healthproject.Views.CustomViewPager>
 
 </RelativeLayout>

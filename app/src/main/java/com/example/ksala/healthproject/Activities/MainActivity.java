@@ -1,4 +1,4 @@
-package com.example.ksala.healthproject;
+package com.example.ksala.healthproject.Activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,11 +14,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+
+import com.example.ksala.healthproject.Fragments.AbstractFragment;
+import com.example.ksala.healthproject.Fragments.CommonFragment;
+import com.example.ksala.healthproject.Concurrency.ConnectionThread;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.BloodPressureFragment;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.ECGFragment;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.LungCapacityFragment;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.OxygenSaturationFragment;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.RespiratoryRateFragment;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.TemperatureFragment;
+import com.example.ksala.healthproject.Views.CustomViewPager;
+import com.example.ksala.healthproject.Fragments.FunctionFragment;
+import com.example.ksala.healthproject.R;
+import com.example.ksala.healthproject.Utils;
 
 import java.util.Set;
 
@@ -36,8 +49,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     private BluetoothDevice bluetoothDevice = null;
 
     private Handler mainHandler;
-    private ConnectThread connectThread;
-    private ConnectedThread connectedThread;
+    private ConnectionThread connectionThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +125,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     }
 
     public void connectToDevice() {
-        connectThread = new ConnectThread(bluetoothDevice, mainHandler);
-        connectThread.start();
-
+        connectionThread = new ConnectionThread(bluetoothDevice, mainHandler);
+        connectionThread.start();
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -142,13 +153,13 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     private void configurePages() {
         fragments = new AbstractFragment[NUM_PAGES];
-        fragments[0] = new CommonFragment();
-        fragments[1] = new CommonFragment();
-        fragments[2] = new CommonFragment();
+        fragments[0] = new RespiratoryRateFragment();
+        fragments[1] = new BloodPressureFragment();
+        fragments[2] = new ECGFragment();
         fragments[3] = new FunctionFragment();
-        fragments[4] = new CommonFragment();
-        fragments[5] = new CommonFragment();
-        fragments[6] = new CommonFragment();
+        fragments[4] = new LungCapacityFragment();
+        fragments[5] = new TemperatureFragment();
+        fragments[6] = new OxygenSaturationFragment();
     }
 
     public int getCurrentPage() {

@@ -1,4 +1,4 @@
-package com.example.ksala.healthproject;
+package com.example.ksala.healthproject.Fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import com.example.ksala.healthproject.Adapters.ImageAdapter;
+import com.example.ksala.healthproject.R;
 
 public class FunctionFragment extends AbstractFragment implements AdapterView.OnItemClickListener {
 

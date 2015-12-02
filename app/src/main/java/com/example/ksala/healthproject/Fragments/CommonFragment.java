@@ -1,4 +1,4 @@
-package com.example.ksala.healthproject;
+package com.example.ksala.healthproject.Fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.example.ksala.healthproject.R;
+import com.example.ksala.healthproject.Utils;
+
+import org.w3c.dom.Text;
 
 public class CommonFragment extends AbstractFragment implements View.OnClickListener {
 
@@ -14,9 +20,10 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
     public static int MIDDLE_PAGE = 1;
     public static int END_PAGE = 2;
 
-    private RelativeLayout startLayout, middleLayout, endLayout;
-    private Button startButton, cancelButton, restartButton, menuButton;
-    private int fragmentPage = 0;
+    protected RelativeLayout startLayout, middleLayout, endLayout;
+    protected Button startButton, cancelButton, restartButton, menuButton;
+    protected TextView startText;
+    protected int fragmentPage = 0;
 
     public CommonFragment() {
 
@@ -50,6 +57,8 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
         startLayout.setVisibility(((fragmentPage == START_PAGE) ? View.VISIBLE : View.INVISIBLE));
         middleLayout.setVisibility(((fragmentPage == MIDDLE_PAGE) ? View.VISIBLE : View.INVISIBLE));
         endLayout.setVisibility(((fragmentPage == END_PAGE) ? View.VISIBLE : View.INVISIBLE));
+
+        startText = (TextView) rootView.findViewById(R.id.startText);
 
         return rootView;
     }

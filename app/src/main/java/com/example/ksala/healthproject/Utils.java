@@ -13,7 +13,7 @@ public class Utils {
     public static final String LOG_TAG = "LOG-PEC";
 
     /* TODO: Change name to OTOWISKIS */
-    public static final String BT_DEVICE_NAME = "pec10f";
+    public static final String BT_DEVICE_NAME = "OTOWISKIS";
     public static final int BT_ENABLE_REQUEST = 0;
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
     public static final int BT_CONNECTION_STARTED_MSG = 99;
@@ -80,4 +80,34 @@ public class Utils {
         outtoLeft.setInterpolator(new AccelerateInterpolator());
         return outtoLeft;
     }
+
+    public static final String RESPIRATORY_RATE_INSTRUCTIONS =
+            "1. Colocar el sensor de temperatura davant la boca i respirar normal.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostrarà la cadència respiratoria mesurada.";
+
+    public static final String BLOOD_PRESSURE_INSTRUCTIONS =
+            "1. Ligar-se el braçalet de pressió a la part superior del braç.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostrarà la pressió sanguinia mesurada.";
+
+    public static final String ECG_INSTRUCTIONS =
+            "1. Colocar cada dit índex de la mà sobre una placa metàlica.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostrarà l'electrocardiograma sencer.";
+
+    public static final String LUNG_CAPACITY_INSTRUCTIONS =
+            "1. Agafar aire i bufar a través del tub tant fort com sigui possible.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostraran els resultats de la capacitat pulmonar mesurada.";
+
+    public static final String TEMPERATURE_INSTRUCTIONS =
+            "1. Possar-se el sensor de temperatura sota la aixella.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostrarà la temperatura corporal mesurada.";
+
+    public static final String OXYGEN_SATURATION_INSTRUCTIONS =
+            "1. Colocar el dit índex en la pinça.\n\n" +
+            "2. Esperar fins que s'acabi el procés.\n\n" +
+            "3. En la pantalla es mostrarà l'oxigen en sang mesurat.";
 }

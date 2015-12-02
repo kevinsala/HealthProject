@@ -1,4 +1,4 @@
-package com.example.ksala.healthproject;
+package com.example.ksala.healthproject.Views;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
