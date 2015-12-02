@@ -16,7 +16,9 @@ public class Utils {
     public static final String BT_DEVICE_NAME = "pec10f";
     public static final int BT_ENABLE_REQUEST = 0;
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-
+    public static final int BT_CONNECTION_STARTED_MSG = 99;
+    public static final int BT_READ_MSG = 100;
+    public static final int BT_CONNECTION_LOST_MSG = 101;
     public static final int medicalIcons []= {
             R.mipmap.ecg,
             R.mipmap.lungcapacity,

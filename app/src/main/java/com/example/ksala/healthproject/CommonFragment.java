@@ -10,8 +10,13 @@ import android.widget.RelativeLayout;
 
 public class CommonFragment extends AbstractFragment implements View.OnClickListener {
 
+    public static int START_PAGE = 0;
+    public static int MIDDLE_PAGE = 1;
+    public static int END_PAGE = 2;
+
     private RelativeLayout startLayout, middleLayout, endLayout;
     private Button startButton, cancelButton, restartButton, menuButton;
+    private int fragmentPage = 0;
 
     public CommonFragment() {
 
@@ -29,21 +34,22 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.fragment_common, container, false);
 
         startLayout = (RelativeLayout) rootView.findViewById(R.id.startLayout);
-        startLayout.setVisibility(View.VISIBLE);
         startButton = (Button) rootView.findViewById(R.id.startButton);
         startButton.setOnClickListener(this);
 
         middleLayout = (RelativeLayout) rootView.findViewById(R.id.middleLayout);
-        middleLayout.setVisibility(View.INVISIBLE);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
 
         endLayout = (RelativeLayout) rootView.findViewById(R.id.endLayout);
-        endLayout.setVisibility(View.INVISIBLE);
         restartButton = (Button) rootView.findViewById(R.id.restartButton);
         restartButton.setOnClickListener(this);
         menuButton = (Button) rootView.findViewById(R.id.menuButton);
         menuButton.setOnClickListener(this);
+
+        startLayout.setVisibility(((fragmentPage == START_PAGE) ? View.VISIBLE : View.INVISIBLE));
+        middleLayout.setVisibility(((fragmentPage == MIDDLE_PAGE) ? View.VISIBLE : View.INVISIBLE));
+        endLayout.setVisibility(((fragmentPage == END_PAGE) ? View.VISIBLE : View.INVISIBLE));
 
         return rootView;
     }
@@ -52,6 +58,7 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.startButton) {
+            fragmentPage = MIDDLE_PAGE;
             getMainActivity().setSwipeable(false);
             startLayout.setAnimation(Utils.outGoUp(350));
             middleLayout.setAnimation(Utils.inGoUp(350));
@@ -59,13 +66,15 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
             middleLayout.setVisibility(View.VISIBLE);
         }
         else if (id == R.id.cancelButton) {
+            fragmentPage = START_PAGE;
             getMainActivity().setSwipeable(true);
-            middleLayout.setAnimation(Utils.outGoUp(350));
-            endLayout.setAnimation(Utils.inGoUp(350));
+            middleLayout.setAnimation(Utils.outGoDown(350));
+            startLayout.setAnimation(Utils.inGoDown(350));
             middleLayout.setVisibility(View.INVISIBLE);
-            endLayout.setVisibility(View.VISIBLE);
+            startLayout.setVisibility(View.VISIBLE);
         }
         else if (id == R.id.restartButton) {
+            fragmentPage = MIDDLE_PAGE;
             getMainActivity().setSwipeable(false);
             middleLayout.setAnimation(Utils.inGoDown(350));
             endLayout.setAnimation(Utils.outGoDown(350));

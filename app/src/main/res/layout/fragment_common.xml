@@ -17,8 +17,8 @@
             android:layout_centerHorizontal="true"
             android:text="@string/start" />
 
-        <FrameLayout
-            android:id="@+id/startFrame"
+        <TextView
+            android:id="@+id/startText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/startButton" />
@@ -40,12 +40,21 @@
             android:layout_centerHorizontal="true"
             android:text="@string/cancel" />
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_above="@id/cancelButton" />
+
         <FrameLayout
             android:id="@+id/middleFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/cancelButton" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -83,7 +92,9 @@
             android:id="@+id/endFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/endButtons"/>
+            android:layout_above="@id/endButtons">
+
+        </FrameLayout>
     </RelativeLayout>
 
 </RelativeLayout>

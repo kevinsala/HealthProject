@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -19,7 +22,7 @@ import android.view.Gravity;
 
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Handler.Callback {
 
     /* View Pager attributes */
     private static final int NUM_PAGES = 7;
@@ -32,10 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice bluetoothDevice = null;
 
+    private Handler mainHandler;
+    private ConnectThread connectThread;
+    private ConnectedThread connectedThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainHandler = new Handler(Looper.getMainLooper(), this);
 
         /* Bluetooth configuration */
         //configureBluetooth();
@@ -104,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectToDevice() {
-        ConnectThread thread = new ConnectThread(bluetoothDevice);
-        thread.start();
+        connectThread = new ConnectThread(bluetoothDevice, mainHandler);
+        connectThread.start();
+
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -157,6 +167,21 @@ public class MainActivity extends AppCompatActivity {
             setSwipeable(true);
             setCurrentPage(MAIN_PAGE);
         }
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        int what = msg.what;
+        if (what == Utils.BT_CONNECTION_STARTED_MSG) {
+
+        } else if (what == Utils.BT_READ_MSG) {
+
+        } else if (what == Utils.BT_CONNECTION_LOST_MSG) {
+
+        } else {
+            return false;
+        }
+        return true;
     }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {

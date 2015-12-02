@@ -2,6 +2,7 @@ package com.example.ksala.healthproject;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,10 +11,12 @@ import java.io.IOException;
  * Created by ksala on 17/11/2015.
  */
 public class ConnectThread extends Thread {
+    private final Handler handler;
     private final BluetoothSocket socket;
     private final BluetoothDevice device;
 
-    public ConnectThread(BluetoothDevice btDevice) {
+    public ConnectThread(BluetoothDevice btDevice, Handler handler) {
+        this.handler = handler;
         // Use a temporary object that is later assigned to socket,
         // because socket is final
         BluetoothSocket tmp = null;
@@ -33,6 +36,7 @@ public class ConnectThread extends Thread {
             // Connect the device through the socket. This will block
             // until it succeeds or throws an exception
             socket.connect();
+            handler.obtainMessage(Utils.BT_CONNECTION_STARTED_MSG).sendToTarget();
             Log.d(Utils.LOG_TAG, "Device connected!");
         } catch (IOException connectException) {
             // Unable to connect; close the socket and get out
