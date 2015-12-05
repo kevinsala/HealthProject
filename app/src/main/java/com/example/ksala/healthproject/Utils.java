@@ -92,7 +92,8 @@ public class Utils {
 
     public static final String ECG_INSTRUCTIONS =
             "1. Colocar cada dit índex de la mà sobre una placa metàlica.\n\n" +
-            "2. En la pantalla es mostrarà l'electrocardiograma sencer.";
+            "2. Mantingui els dits en les plaques metàliques fins que vulgui aturar la prova.\n\n" +
+            "3. En la pantalla es mostrarà l'electrocardiograma sencer.";
 
     public static final String LUNG_CAPACITY_INSTRUCTIONS =
             "1. Agafar aire i bufar a través del tub tant fort com sigui possible.\n\n" +

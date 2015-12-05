@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">HealthProject</string>
+    <string name="app_name_space">Health Project</string>
 
+    <string name="electrocardiography">Electrocardiography</string>
     <string name="ecg">ECG</string>
     <string name="o2saturation">Oxygen Saturation</string>
     <string name="lungcapacity">Lung Capacity</string>
@@ -12,4 +14,6 @@
     <string name="menu">Menu</string>
     <string name="restart">Restart</string>
     <string name="startTitle">Recorda els passos a seguir:\n\n</string>
+    <string name="openChart">Click to open</string>
+    <string name="preview">Preview</string>
 </resources>

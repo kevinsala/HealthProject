@@ -27,4 +27,24 @@ public class RespiratoryRateFragment extends CommonFragment {
         startText.setText(Utils.RESPIRATORY_RATE_INSTRUCTIONS);
         return rootView;
     }
+
+    @Override
+    public void startPressed() {
+
+    }
+
+    @Override
+    public void cancelPressed() {
+
+    }
+
+    @Override
+    public void restartPressed() {
+
+    }
+
+    @Override
+    public void mesurementEnded() {
+
+    }
 }

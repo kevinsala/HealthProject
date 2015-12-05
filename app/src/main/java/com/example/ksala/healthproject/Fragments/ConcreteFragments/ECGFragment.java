@@ -1,29 +1,32 @@
 package com.example.ksala.healthproject.Fragments.ConcreteFragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
+import com.example.ksala.healthproject.Activities.ECGViewerActivity;
 import com.example.ksala.healthproject.Fragments.CommonFragment;
 import com.example.ksala.healthproject.R;
 import com.example.ksala.healthproject.Utils;
-
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.chart.XYChart;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
+import com.example.ksala.healthproject.Views.ECGChart;
 
 public class ECGFragment extends CommonFragment {
 
-    private XYSeries series = new XYSeries("Electrocardiograma");
-    private XYSeriesRenderer renderer = new XYSeriesRenderer();
+    private ECGChart middleEcgChart;
+    private ECGChart endEcgChart;
+    private Button openChartButton;
+
+    private FrameLayout middleFrame;
+    private FrameLayout endFrame;
+    private RelativeLayout ecgEndLayout;
 
     public ECGFragment() {
 
@@ -32,6 +35,16 @@ public class ECGFragment extends CommonFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        middleEcgChart = new ECGChart(getContext(), ECGChart.PORTRAIT);
+        middleEcgChart.setScrollable(true);
+
+        for (int i = 0; i < 50; ++i) {
+            for (int j = 0; j < 50; ++j)
+                middleEcgChart.addData(i*100 + j, -25 + j);
+            for (int j = 0; j < 50; ++j)
+                middleEcgChart.addData(i*100 + j + 50, 25 - j);
+        }
     }
 
     @Override
@@ -41,44 +54,64 @@ public class ECGFragment extends CommonFragment {
 
         startText.setText(Utils.ECG_INSTRUCTIONS);
 
-        for (int i = 0; i < 10; ++i) series.add(i, i);
+        middleFrame = (FrameLayout) rootView.findViewById(R.id.middleFrame);
+        endFrame = (FrameLayout) rootView.findViewById(R.id.endFrame);
 
-        // Now we create the renderer
-        renderer.setLineWidth(5);
-        renderer.setColor(Color.RED);
-        // Include low and max value
-        renderer.setDisplayBoundingPoints(true);
-        // we add point markers
-        renderer.setPointStyle(PointStyle.CIRCLE);
-        renderer.setPointStrokeWidth(10);
-
-        XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-        mRenderer.addSeriesRenderer(renderer);
-
-        // We want to avoid black border
-        mRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00)); // transparent margins
-// Disable Pan on two axis
-        mRenderer.setPanEnabled(false, false);
-        mRenderer.setYAxisMax(10);
-        mRenderer.setYAxisMin(0);
-        mRenderer.setShowGrid(true); // we show the grid
-        mRenderer.setZoomEnabled(false, false);
-
-
-        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-        dataset.addSeries(series);
-
-        GraphicalView chartView = ChartFactory.getLineChartView(getActivity(), dataset, mRenderer);
-
-        FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.middleFrame);
-
-        frameLayout.addView(chartView,0);
+        middleFrame.addView(middleEcgChart.getView());
 
         return rootView;
     }
 
+    private void initEcgEndLayout() {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+
+        ecgEndLayout = (RelativeLayout) inflater.inflate(R.layout.ecg_layout, null);
+        openChartButton = (Button) ecgEndLayout.findViewById(R.id.openChartButton);
+        openChartButton.setOnClickListener(this);
+        RelativeLayout ecgChartLayout = (RelativeLayout) ecgEndLayout.findViewById(R.id.ecgChartLayout);
+        ecgChartLayout.addView(endEcgChart.getView());
+    }
+
+    public void addData(double x, double y) {
+        middleEcgChart.addData(x, y);
+    }
+
     @Override
-    public boolean hasMiddle() {
-        return false;
+    public void startPressed() {
+        middleEcgChart.setScrollable(true);
+    }
+
+    @Override
+    public void cancelPressed() {
+        middleEcgChart.clearData();
+    }
+
+    @Override
+    public void restartPressed() {
+        endEcgChart.clearData();
+        middleEcgChart.clearData();
+    }
+
+    @Override
+    public void mesurementEnded() {
+        if (ecgEndLayout == null) {
+            endEcgChart = new ECGChart(getContext(), ECGChart.PORTRAIT, middleEcgChart.getData());
+            initEcgEndLayout();
+            endFrame.addView(ecgEndLayout);
+        } else endEcgChart.setData(middleEcgChart.getData());
+        endEcgChart.setScrollable(false);
+        super.mesurementEnded();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.openChartButton) {
+            middleEcgChart.clearData();
+            Intent intent = new Intent(getContext(), ECGViewerActivity.class);
+            intent.putExtra("chart-series", endEcgChart.getData());
+            startActivity(intent);
+        }
+        else super.onClick(v);
     }
 }

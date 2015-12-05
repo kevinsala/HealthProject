@@ -27,4 +27,24 @@ public class LungCapacityFragment extends CommonFragment {
         startText.setText(Utils.LUNG_CAPACITY_INSTRUCTIONS);
         return rootView;
     }
+
+    @Override
+    public void startPressed() {
+
+    }
+
+    @Override
+    public void cancelPressed() {
+
+    }
+
+    @Override
+    public void restartPressed() {
+
+    }
+
+    @Override
+    public void mesurementEnded() {
+
+    }
 }

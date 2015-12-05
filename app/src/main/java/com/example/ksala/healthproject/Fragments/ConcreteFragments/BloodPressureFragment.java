@@ -27,4 +27,24 @@ public class BloodPressureFragment extends CommonFragment {
         startText.setText(Utils.BLOOD_PRESSURE_INSTRUCTIONS);
         return rootView;
     }
+
+    @Override
+    public void startPressed() {
+
+    }
+
+    @Override
+    public void cancelPressed() {
+
+    }
+
+    @Override
+    public void restartPressed() {
+
+    }
+
+    @Override
+    public void mesurementEnded() {
+
+    }
 }

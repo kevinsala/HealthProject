@@ -42,8 +42,7 @@
         android:id="@+id/middleLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/margin"
-        android:background="@android:color/darker_gray">
+        android:padding="@dimen/margin">
 
         <Button
             android:id="@+id/cancelButton"
@@ -61,13 +60,15 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin"
             android:layout_marginBottom="@dimen/margin"
-            android:layout_above="@id/cancelButton" />
+            android:layout_above="@id/cancelButton"
+            android:visibility="invisible"/>
 
         <FrameLayout
             android:id="@+id/middleFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/cancelButton" />
+            android:layout_above="@id/cancelButton"
+            android:layout_marginBottom="@dimen/margin"/>
     </RelativeLayout>
 
     <RelativeLayout
