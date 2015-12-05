@@ -63,26 +63,39 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
         return rootView;
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.startButton) {
+    public boolean hasMiddle() {
+        return true;
+    }
+
+    public void startPressed() {
+        if (hasMiddle()) {
             fragmentPage = MIDDLE_PAGE;
             getMainActivity().setSwipeable(false);
             startLayout.setAnimation(Utils.outGoUp(350));
             middleLayout.setAnimation(Utils.inGoUp(350));
             startLayout.setVisibility(View.INVISIBLE);
             middleLayout.setVisibility(View.VISIBLE);
-        }
-        else if (id == R.id.cancelButton) {
-            fragmentPage = START_PAGE;
+        } else {
+            fragmentPage = END_PAGE;
             getMainActivity().setSwipeable(true);
-            middleLayout.setAnimation(Utils.outGoDown(350));
-            startLayout.setAnimation(Utils.inGoDown(350));
-            middleLayout.setVisibility(View.INVISIBLE);
-            startLayout.setVisibility(View.VISIBLE);
+            startLayout.setAnimation(Utils.outGoUp(350));
+            endLayout.setAnimation(Utils.inGoUp(350));
+            startLayout.setVisibility(View.INVISIBLE);
+            endLayout.setVisibility(View.VISIBLE);
         }
-        else if (id == R.id.restartButton) {
+    }
+
+    public void cancelPressed() {
+        fragmentPage = START_PAGE;
+        getMainActivity().setSwipeable(true);
+        middleLayout.setAnimation(Utils.outGoDown(350));
+        startLayout.setAnimation(Utils.inGoDown(350));
+        middleLayout.setVisibility(View.INVISIBLE);
+        startLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void restartPressed() {
+        if (hasMiddle()) {
             fragmentPage = MIDDLE_PAGE;
             getMainActivity().setSwipeable(false);
             middleLayout.setAnimation(Utils.inGoDown(350));
@@ -90,6 +103,26 @@ public class CommonFragment extends AbstractFragment implements View.OnClickList
             middleLayout.setVisibility(View.VISIBLE);
             endLayout.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void middleToEnd() {
+
+    }
+
+    public void endToMiddle() {
+
+    }
+
+    public void endToEnd() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.startButton) startPressed();
+        else if (id == R.id.cancelButton) cancelPressed();
+        else if (id == R.id.restartButton) restartPressed();
         else if (id == R.id.menuButton) {
             getMainActivity().onBackPressed();
         }

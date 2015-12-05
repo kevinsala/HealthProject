@@ -12,7 +12,6 @@ import java.util.UUID;
 public class Utils {
     public static final String LOG_TAG = "LOG-PEC";
 
-    /* TODO: Change name to OTOWISKIS */
     public static final String BT_DEVICE_NAME = "OTOWISKIS";
     public static final int BT_ENABLE_REQUEST = 0;
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
@@ -93,8 +92,7 @@ public class Utils {
 
     public static final String ECG_INSTRUCTIONS =
             "1. Colocar cada dit índex de la mà sobre una placa metàlica.\n\n" +
-            "2. Esperar fins que s'acabi el procés.\n\n" +
-            "3. En la pantalla es mostrarà l'electrocardiograma sencer.";
+            "2. En la pantalla es mostrarà l'electrocardiograma sencer.";
 
     public static final String LUNG_CAPACITY_INSTRUCTIONS =
             "1. Agafar aire i bufar a través del tub tant fort com sigui possible.\n\n" +
