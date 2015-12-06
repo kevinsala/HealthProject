@@ -6,18 +6,17 @@ import android.view.animation.TranslateAnimation;
 
 import java.util.UUID;
 
-/**
- * Created by ksala on 12/11/2015.
- */
 public class Utils {
     public static final String LOG_TAG = "LOG-PEC";
 
-    public static final String BT_DEVICE_NAME = "OTOWISKIS";
-    public static final int BT_ENABLE_REQUEST = 0;
-    public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-    public static final int BT_CONNECTION_STARTED_MSG = 99;
-    public static final int BT_READ_MSG = 100;
-    public static final int BT_CONNECTION_LOST_MSG = 101;
+    public static final int ECG_FUNC = 0;
+    public static final int BLOOD_PRESSURE_FUNC = 1;
+    public static final int RESPIRATORY_RATE_FUNC = 2;
+    public static final int LUNG_CAPACITY_FUNC = 3;
+    public static final int TEMPERATURE_FUNC = 4;
+    public static final int OXYGEN_SATURATION_FUNC = 5;
+    public static final int NULL_FUNC = -1;
+
     public static final int medicalIcons []= {
             R.mipmap.ecg,
             R.mipmap.lungcapacity,

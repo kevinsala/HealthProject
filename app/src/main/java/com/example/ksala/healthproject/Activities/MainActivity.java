@@ -18,21 +18,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-
+import com.example.ksala.healthproject.DataMessage;
 import com.example.ksala.healthproject.Fragments.AbstractFragment;
-import com.example.ksala.healthproject.Fragments.CommonFragment;
-import com.example.ksala.healthproject.Concurrency.ConnectionThread;
+import com.example.ksala.healthproject.Bluetooth.*;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.BloodPressureFragment;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.ECGFragment;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.LungCapacityFragment;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.OxygenSaturationFragment;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.RespiratoryRateFragment;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.TemperatureFragment;
+import com.example.ksala.healthproject.R;
 import com.example.ksala.healthproject.Views.CustomViewPager;
 import com.example.ksala.healthproject.Fragments.FunctionFragment;
-import com.example.ksala.healthproject.R;
 import com.example.ksala.healthproject.Utils;
-
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
@@ -51,10 +49,14 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     private Handler mainHandler;
     private ConnectionThread connectionThread;
 
+    private int currentFunctionality;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        currentFunctionality = Utils.NULL_FUNC;
 
         mainHandler = new Handler(Looper.getMainLooper(), this);
 
@@ -77,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         if (bluetoothAdapter == null) displayBtNotSupportedDialog();
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, Utils.BT_ENABLE_REQUEST);
+            startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
         }
 
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         // If there are paired devices
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                if (Utils.BT_DEVICE_NAME.equals(device.getName())) {
+                if (BluetoothUtils.DEVICE_NAME.equals(device.getName())) {
                     Log.d(Utils.LOG_TAG, "Bluetooth device found in paired devices");
                     bluetoothDevice = device;
                     connectToDevice();
@@ -112,10 +114,10 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Utils.BT_ENABLE_REQUEST) {
+        if (requestCode == BluetoothUtils.ENABLE_REQUEST) {
             if (resultCode != RESULT_OK) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, Utils.BT_ENABLE_REQUEST);
+                startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
             }
         }
     }
@@ -129,6 +131,22 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         connectionThread.start();
     }
 
+    public void startMeasurement(int functionality) {
+        boolean sent = connectionThread.send(BluetoothUtils.START_MSG, functionality);
+        if (!sent) Log.d(Utils.LOG_TAG, "Start measurement failed");
+        currentFunctionality = functionality;
+    }
+
+    public void cancelMeasurement(int functionality) {
+        boolean sent = connectionThread.send(BluetoothUtils.END_MSG, functionality);
+        if (!sent) Log.d(Utils.LOG_TAG, "Cancel measurement failed");
+        currentFunctionality = Utils.NULL_FUNC;
+    }
+
+    public void endMeasurement(int functionality) {
+        currentFunctionality = Utils.NULL_FUNC;
+    }
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -137,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-                if (Utils.BT_DEVICE_NAME.equals(device.getName())) {
+                if (BluetoothUtils.DEVICE_NAME.equals(device.getName())) {
                     bluetoothDevice = device;
                     Log.d(Utils.LOG_TAG, "Bluetooth device discovered");
                     bluetoothAdapter.cancelDiscovery();
@@ -183,11 +201,15 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     @Override
     public boolean handleMessage(Message msg) {
         int what = msg.what;
-        if (what == Utils.BT_CONNECTION_STARTED_MSG) {
+        int func = msg.arg1;
+        if (what == BluetoothUtils.CONNECTION_STARTED_MSG) {
 
-        } else if (what == Utils.BT_READ_MSG) {
+        } else if (what == BluetoothUtils.DATA_MSG) {
+            DataMessage data = (DataMessage) msg.obj;
+            if (func == currentFunctionality) {
 
-        } else if (what == Utils.BT_CONNECTION_LOST_MSG) {
+            }
+        } else if (what == BluetoothUtils.CONNECTION_LOST_MSG) {
 
         } else {
             return false;
