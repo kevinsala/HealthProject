@@ -1,11 +1,9 @@
 package com.example.ksala.healthproject.Activities;
 
+import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,20 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import com.example.ksala.healthproject.DataMessage;
-import com.example.ksala.healthproject.Fragments.AbstractFragment;
 import com.example.ksala.healthproject.Bluetooth.*;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.BloodPressureFragment;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.ECGFragment;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.LungCapacityFragment;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.OxygenSaturationFragment;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.RespiratoryRateFragment;
-import com.example.ksala.healthproject.Fragments.ConcreteFragments.TemperatureFragment;
-import com.example.ksala.healthproject.R;
+import com.example.ksala.healthproject.Fragments.*;
+import com.example.ksala.healthproject.Fragments.ConcreteFragments.*;
 import com.example.ksala.healthproject.Views.CustomViewPager;
-import com.example.ksala.healthproject.Fragments.FunctionFragment;
-import com.example.ksala.healthproject.Utils;
-import java.util.Set;
+import com.example.ksala.healthproject.*;
+
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
 
@@ -76,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     public void configureBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) displayBtNotSupportedDialog();
+        if (bluetoothAdapter == null) finish();
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
@@ -90,26 +80,11 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                     Log.d(Utils.LOG_TAG, "Bluetooth device found in paired devices");
                     bluetoothDevice = device;
                     connectToDevice();
-                    break;
+                    return;
                 }
             }
         }
-        else {
-            Log.d(Utils.LOG_TAG, "Starting discovery");
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            registerReceiver(receiver, filter);
-            bluetoothAdapter.startDiscovery();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (receiver != null) {
-            try {
-                unregisterReceiver(receiver);
-            } catch (Exception e) { }
-        }
+        Log.d(Utils.LOG_TAG, "Bluetooth device not paired! Please connect to it through Settings");
     }
 
     @Override
@@ -120,10 +95,6 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
             }
         }
-    }
-
-    public void displayBtNotSupportedDialog() {
-
     }
 
     public void connectToDevice() {
@@ -146,24 +117,6 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     public void endMeasurement(int functionality) {
         currentFunctionality = Utils.NULL_FUNC;
     }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-                if (BluetoothUtils.DEVICE_NAME.equals(device.getName())) {
-                    bluetoothDevice = device;
-                    Log.d(Utils.LOG_TAG, "Bluetooth device discovered");
-                    bluetoothAdapter.cancelDiscovery();
-                    connectToDevice();
-                }
-            }
-        }
-    };
 
     public void setSwipeable(boolean swipeable) {
         viewPager.setSwipeable(swipeable);
