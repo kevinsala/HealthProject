@@ -1,11 +1,11 @@
 # Projecte d'Enginyeria de Computadors
 
-Health project build with Arduino.
+:pill: Health project build with Arduino. 
 
 ## Features
 1. Anrdoid custom app.
 2. Communication with Android phone via Bluetooh.
-3. Electrocardiogram recording. 
+3. Electrocardiogram recording :chart_with_upwards_trend:
 4. Body temperature measurement.
 5. Blood pressure measurement.
 6. SPO2 measurement.
