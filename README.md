@@ -1,3 +1,17 @@
 # Projecte d'Enginyeria de Computadors
 
-Equip mèdic per al mesurament de constants vitals des d'un Arduino Shield.
+> Health project build with Arduino.
+
+**Features:**
+
+- [x] Serial communication integration.
+- [ ] SPO2
+  - [x] Measurement of sensor analog output.
+  - [ ] Formula transformation to *spo2* percentage.
+- [ ] RGB Led Color picker.
+- [ ] LED control (**MUX**) for determining which feature is being used.
+- [ ] Bluetooh communication with Android.
+- [ ] Body temperature sensor.
+- [ ] Lung capacity.
+- [ ] ECG.
+- [ ] Blood pressure.
