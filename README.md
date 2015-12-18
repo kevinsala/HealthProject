@@ -1,8 +1,13 @@
 # Projecte d'Enginyeria de Computadors
 
-> Health project build with Arduino.
+Health project build with Arduino.
 
-**Features:**
+## Features
+
+
+
+
+## To Do List
 
 - [x] Serial communication integration.
 - [ ] SPO2
