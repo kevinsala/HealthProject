@@ -18,6 +18,7 @@ class RgbLed
  public:
     RgbLed(int dp, int lp, int ep, int cp);
 	void sendColor(long r, long g, long b);
+	void off();
 };
 
 #endif

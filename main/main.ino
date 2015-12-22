@@ -4,8 +4,8 @@
 
 */
 
-#include "libs/Spo2.h"
-#include "libs/RgbLed.h"
+#include "Spo2.h"
+#include "RgbLed.h"
 
 /* RGB LED INTERFACE */
 #define RgbClockPin 5
@@ -13,12 +13,12 @@
 #define RgbLatchPin 7
 #define RgbDataPin 8
 
-RgbLed rgb_led(RgbDataPin,RgbLatchPin,RgbEnablePin,RgbClockPin);
+
 
 /* SPO2 INTERFACE */
-#define FotoSensorPin A2
-#define FotoRedLedPin 11
-#define FotoIRLedPin 10
+#define Spo2SensorPin A2
+#define Spo2RedLedPin 11
+#define Spo2IRLedPin 10
 
 
 
@@ -26,10 +26,11 @@ RgbLed rgb_led(RgbDataPin,RgbLatchPin,RgbEnablePin,RgbClockPin);
 
 void setup() {
   Serial.begin(9600);
-  
 }
 
 void loop() {
+  RgbLed rgb_led(RgbDataPin,RgbLatchPin,RgbEnablePin,RgbClockPin);
+  Spo2 spo2(Spo2SensorPin, Spo2RedLedPin, Spo2IRLedPin);
   
   String input = "";
   while(Serial.available() > 0) {
@@ -39,15 +40,15 @@ void loop() {
 
   if(input == "spo2") {
     Serial.println("SPO2");
-    spo2_measure();
+    int bloodoxy = spo2.measure();
   }
       
   if(input == "rgb") {
     Serial.println("RGB LED on");
-    int color[3] = {1023, 0, 0};
-    rgb_on(color);
+    rgb_led.sendColor(255, 0, 125);
   }
 
   
   delay(500);
+  rgb_led.off();
 }

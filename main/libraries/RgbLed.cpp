@@ -4,6 +4,8 @@
  */
 
 #include "RgbLed.h"
+#include "Arduino.h"
+
 RgbLed::RgbLed(int dp, int lp, int ep, int cp)
 {
 
@@ -67,4 +69,9 @@ void RgbLed::latch()
   digitalWrite(_LatchPin, HIGH);
   delayMicroseconds(5);
   digitalWrite(_LatchPin, LOW);
+}
+
+void RgbLed::off()
+{
+  digitalWrite(_EnablePin, LOW);
 }

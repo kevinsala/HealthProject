@@ -4,7 +4,8 @@
   
 */
 
-#include "spo2.h"
+#include "Spo2.h"
+#include "Arduino.h"
 
 
 Spo2::Spo2(int fotoSensor, int redLed, int IRLed)
