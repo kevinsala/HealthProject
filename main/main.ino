@@ -4,36 +4,29 @@
 
 */
 
+#include "libs/Spo2.h"
+#include "libs/RgbLed.h"
+
+/* RGB LED INTERFACE */
+#define RgbClockPin 5
+#define RgbEnablePin 6
+#define RgbLatchPin 7
+#define RgbDataPin 8
+
+RgbLed rgb_led(RgbDataPin,RgbLatchPin,RgbEnablePin,RgbClockPin);
+
 /* SPO2 INTERFACE */
 #define FotoSensorPin A2
 #define FotoRedLedPin 11
 #define FotoIRLedPin 10
-int FotoSensorValue = 0;
 
-void spo2_measure() {
-  digitalWrite(FotoIRLedPin, LOW);
-  digitalWrite(FotoRedLedPin, HIGH);
-  delay(10);
-  FotoSensorValue = analogRead(FotoSensorPin);
-  Serial.print("RedLed: ");
-  Serial.print(FotoSensorValue);
 
-  digitalWrite(FotoIRLedPin, HIGH);
-  digitalWrite(FotoRedLedPin, LOW);
-  delay(10);
-  FotoSensorValue = analogRead(FotoSensorPin);
-  Serial.print(" || IRLed: ");
-  Serial.println(FotoSensorValue);
-}
+
+
 
 void setup() {
   Serial.begin(9600);
-  /* SPO2 interface */
-  pinMode(FotoRedLedPin, OUTPUT);
-  pinMode(FotoIRLedPin, OUTPUT);
-
-  digitalWrite(FotoRedLedPin, LOW);
-  digitalWrite(FotoIRLedPin, LOW);
+  
 }
 
 void loop() {
@@ -44,12 +37,16 @@ void loop() {
     delay(5);
   }
 
-  if(input == "spo2")
-      spo2_measure();
-  if(input == "rgb")
-    Serial.println("RGB LED!");
-  
-  
+  if(input == "spo2") {
+    Serial.println("SPO2");
+    spo2_measure();
+  }
+      
+  if(input == "rgb") {
+    Serial.println("RGB LED on");
+    int color[3] = {1023, 0, 0};
+    rgb_on(color);
+  }
 
   
   delay(500);
