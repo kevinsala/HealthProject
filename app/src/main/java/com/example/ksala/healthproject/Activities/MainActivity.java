@@ -22,7 +22,6 @@ import com.example.ksala.healthproject.Fragments.ConcreteFragments.*;
 import com.example.ksala.healthproject.Views.CustomViewPager;
 import com.example.ksala.healthproject.*;
 
-
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
 
     /* View Pager attributes */
@@ -124,13 +123,13 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     private void configurePages() {
         fragments = new AbstractFragment[NUM_PAGES];
-        fragments[0] = new RespiratoryRateFragment();
-        fragments[1] = new BloodPressureFragment();
-        fragments[2] = new ECGFragment();
-        fragments[3] = new FunctionFragment();
-        fragments[4] = new LungCapacityFragment();
-        fragments[5] = new TemperatureFragment();
-        fragments[6] = new OxygenSaturationFragment();
+        fragments[Utils.RESPIRATORY_RATE_FUNC]  = new RespiratoryRateFragment();
+        fragments[Utils.BLOOD_PRESSURE_FUNC]    = new BloodPressureFragment();
+        fragments[Utils.ECG_FUNC]               = new ECGFragment();
+        fragments[MAIN_PAGE]                    = new FunctionFragment();
+        fragments[Utils.LUNG_CAPACITY_FUNC]     = new LungCapacityFragment();
+        fragments[Utils.TEMPERATURE_FUNC]       = new TemperatureFragment();
+        fragments[Utils.OXYGEN_SATURATION_FUNC] = new OxygenSaturationFragment();
     }
 
     public int getCurrentPage() {
@@ -164,9 +163,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
             }
         } else if (what == BluetoothUtils.CONNECTION_LOST_MSG) {
 
-        } else {
-            return false;
-        }
+        } else return false;
         return true;
     }
 
