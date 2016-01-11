@@ -73,5 +73,8 @@ void RgbLed::latch()
 
 void RgbLed::off()
 {
-  digitalWrite(_EnablePin, LOW);
+  digitalWrite(_ClockPin, LOW);
+  digitalWrite(_DataPin, LOW);
+  digitalWrite(_LatchPin, LOW);
+  digitalWrite(_EnablePin, LOW); 
 }
