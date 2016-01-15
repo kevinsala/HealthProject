@@ -14,14 +14,16 @@
 
 ### To Do List
 
-- [x] Serial communication integration.
+- [x] Serial communication integration
 - [ ] SPO2
-  - [x] Measurement of sensor analog output.
-  - [ ] Formula transformation to *spo2* percentage.
-- [ ] RGB Led Color picker.
-- [ ] LED control (**MUX**) for determining which feature is being used.
-- [ ] Bluetooh communication with Android.
-- [ ] Body temperature sensor.
+  - [x] Measurement of sensor analog output
+  - [ ] Formula transformation to *spo2* percentage
+- [x] RGB Led Color picker
+- [x] LED control (**MUX**) for determining which feature is being used
+- [ ] Bluetooh communication with Android
+- [x] Body temperature sensor
 - [ ] Lung capacity.
-- [ ] ECG.
-- [ ] Blood pressure.
+  - [x] Read of the value
+  - [ ] Calculate the overall capacity
+- [ ] ECG
+- [ ] Blood pressure
