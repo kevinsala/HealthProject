@@ -8,6 +8,7 @@
 #include "RgbLed.h"
 #include "LedMux.h"
 #include "TempSensor.h"
+#include "LungCapacity.h"
 
 
 /* RGB LED INTERFACE */
