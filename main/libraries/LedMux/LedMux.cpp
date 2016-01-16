@@ -64,3 +64,10 @@ void LedMux::power_on(int lednum)
   }
 
 }
+
+void LedMux::power_off()
+{
+  digitalWrite(_muxAPin, LOW);
+  digitalWrite(_muxBPin, HIGH);
+  digitalWrite(_muxCPin, HIGH);
+}

@@ -9,15 +9,13 @@
 #include "LedMux.h"
 #include "TempSensor.h"
 #include "LungCapacity.h"
-
+#include "Bluetooth.h"
 
 /* RGB LED INTERFACE */
 #define RgbClockPin 5
 #define RgbEnablePin 6
 #define RgbLatchPin 7
 #define RgbDataPin 8
-
-
 
 /* SPO2 INTERFACE */
 #define Spo2SensorPin A2
@@ -29,21 +27,24 @@
 #define LedMuxB 3
 #define LedMuxC 4
 
-
 RgbLed rgb_led(RgbDataPin,RgbLatchPin,RgbEnablePin,RgbClockPin);
 Spo2 spo2(Spo2SensorPin, Spo2RedLedPin, Spo2IRLedPin);
 LedMux ledmux(LedMuxA, LedMuxB, LedMuxC);
 TempSensor tempsensor = TempSensor();
+Bluetooth bluetooth = Bluetooth();
 
 void setup() {
   Serial.begin(9600);
   if(!tempsensor.begin(0x19)) {
     Serial.println("Couldn't find MCP9808!");
   }
+  
+  bluetooth.setup();
+
+  ledmux.power_off();
 }
 
 void loop() {
-  
   
   String input = "";
   while(Serial.available() > 0) {
@@ -56,7 +57,7 @@ void loop() {
     int bloodoxy = spo2.measure();
     Serial.println(bloodoxy);
   }
-      
+  
   else if(input == "rgb") {
     Serial.println("RGB LED on");
     rgb_led.sendColor(255, 0, 125);
@@ -87,6 +88,4 @@ void loop() {
     Serial.print("Temp: "); Serial.print(c);
     tempsensor.shutdown_wake(1);
   }
-  
-  
 }
