@@ -14,7 +14,6 @@ Bluetooth::Bluetooth() : ss(RX_PIN, TX_PIN) {}
 
 void Bluetooth::setup() {
 	ss.begin(9600);
-	ss.println("Bluetooth On please press 1 or 0...");
 }
 
 int Bluetooth::getAction()
@@ -24,15 +23,16 @@ int Bluetooth::getAction()
 		int msgType = ss.read() - '0';
 		assert(ss.read() == 'X');
 
-		ss.println("MSG");
-		ss.println(functionality);
-		ss.println(msgType);
+		Serial.print("MSG: Func: ");
+		Serial.print(functionality);
+		Serial.print(", Type: ");
+		Serial.println(msgType);
 
-		if (msgType == END_MSG) return -1;
+		if (msgType == END_MSG) return STOP_ACTION;
 		else return functionality;
 	}
 
-	return -1;
+	return CONTINUE_ACTION;
 }
 
 void Bluetooth::sendData(int functionality, double data, bool finished)
@@ -105,8 +105,6 @@ void Bluetooth::send2Data(int functionality, double data1, double data2, bool fi
 
 	/* Adds the final mark of the message */
 	msg.concat('X');
-
-	Serial.println(msg);
 
 	/* Sends the message */
 	char msgCharArray[msg.length() + 1];

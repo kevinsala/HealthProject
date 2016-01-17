@@ -20,6 +20,9 @@
 #define END_MSG 2
 #define DATA_END_MSG 3
 
+#define CONTINUE_ACTION -1
+#define STOP_ACTION -2
+
 class Bluetooth
 {
 	private:

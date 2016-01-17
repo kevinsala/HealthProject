@@ -30,6 +30,7 @@
 class TempSensor {
  public:
   TempSensor();
+  void setup();
   boolean begin(uint8_t a = MCP9808_I2CADDR_DEFAULT);  
   float readTempF( void );
   float readTempC( void );
