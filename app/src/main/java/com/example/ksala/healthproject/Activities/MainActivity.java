@@ -3,7 +3,6 @@ package com.example.ksala.healthproject.Activities;
 import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     /* Bluetooth attributes */
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice bluetoothDevice = null;
+    private boolean bluetoothConnected;
 
     private Handler mainHandler;
     private ConnectionThread connectionThread;
@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        currentFunctionality = Utils.NULL_FUNC;
+        currentFunctionality = Utils.NO_FUNC;
 
         mainHandler = new Handler(Looper.getMainLooper(), this);
 
         /* Bluetooth configuration */
-        //configureBluetooth();
+        configureBluetooth();
 
         /* View pager configuration */
         configurePages();
@@ -63,18 +63,67 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     }
 
 
+    /** MEASUREMENT METHODS **/
+    public void startMeasurement(int functionality) {
+        boolean sent = connectionThread.send(BluetoothUtils.START_MSG, functionality);
+        if (!sent) Log.d(Utils.LOG_TAG, "Start measurement failed");
+        currentFunctionality = functionality;
+    }
+
+    public void cancelMeasurement(int functionality) {
+        boolean sent = connectionThread.send(BluetoothUtils.END_MSG, functionality);
+        if (!sent) Log.d(Utils.LOG_TAG, "Cancel measurement failed");
+        currentFunctionality = Utils.NO_FUNC;
+    }
+
+    public void endMeasurement(int functionality) {
+        currentFunctionality = Utils.NO_FUNC;
+    }
+
+
+    /** HANDLING MESSAGES **/
+    @Override
+    public boolean handleMessage(Message msg) {
+        int what = msg.what;
+        int func = msg.arg1;
+
+        if (what == BluetoothUtils.CONNECTION_STARTED_MSG) bluetoothConnected = true;
+
+        else if (what == BluetoothUtils.DATA_MSG || what == BluetoothUtils.DATA_END_MSG) {
+            assert(func != 3 && func > 0 && func < 7);
+
+            DataMessage data = (DataMessage) msg.obj;
+            if (func == currentFunctionality) {
+                if (what == BluetoothUtils.DATA_MSG) {
+                    assert (func == Utils.ECG_FUNC);
+                    ((CommonFragment) fragments[func]).addData(data.x, data.y, false);
+                }
+                else {
+                    ((CommonFragment) fragments[func]).addData(data.x, data.y, true);
+                }
+            }
+        }
+
+        else if (what == BluetoothUtils.CONNECTION_LOST_MSG) bluetoothConnected = false;
+
+        else return false;
+
+        return true;
+    }
+
+
+    /** BLUETOOTH METHODS **/
     public void configureBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) finish();
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
-        }
+        if (!bluetoothAdapter.isEnabled())
+            bluetoothAdapter.enable();
 
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        // If there are paired devices
+        /* If there are paired devices */
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
+                Log.d(Utils.LOG_TAG, device.getName());
                 if (BluetoothUtils.DEVICE_NAME.equals(device.getName())) {
                     Log.d(Utils.LOG_TAG, "Bluetooth device found in paired devices");
                     bluetoothDevice = device;
@@ -86,39 +135,32 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         Log.d(Utils.LOG_TAG, "Bluetooth device not paired! Please connect to it through Settings");
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == BluetoothUtils.ENABLE_REQUEST) {
-            if (resultCode != RESULT_OK) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, BluetoothUtils.ENABLE_REQUEST);
-            }
-        }
-    }
-
     public void connectToDevice() {
         connectionThread = new ConnectionThread(bluetoothDevice, mainHandler);
         connectionThread.start();
     }
 
-    public void startMeasurement(int functionality) {
-        boolean sent = connectionThread.send(BluetoothUtils.START_MSG, functionality);
-        if (!sent) Log.d(Utils.LOG_TAG, "Start measurement failed");
-        currentFunctionality = functionality;
-    }
 
-    public void cancelMeasurement(int functionality) {
-        boolean sent = connectionThread.send(BluetoothUtils.END_MSG, functionality);
-        if (!sent) Log.d(Utils.LOG_TAG, "Cancel measurement failed");
-        currentFunctionality = Utils.NULL_FUNC;
-    }
+    /** PAGES CONFIGURATION **/
+    private class MyPagerAdapter extends FragmentStatePagerAdapter {
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    public void endMeasurement(int functionality) {
-        currentFunctionality = Utils.NULL_FUNC;
-    }
+        @Override
+        public Fragment getItem(int position) {
+            return fragments[position];
+        }
 
-    public void setSwipeable(boolean swipeable) {
-        viewPager.setSwipeable(swipeable);
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return getResources().getString(Utils.medicalNames[position]);
+        }
     }
 
     private void configurePages() {
@@ -150,41 +192,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         }
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        int what = msg.what;
-        int func = msg.arg1;
-        if (what == BluetoothUtils.CONNECTION_STARTED_MSG) {
-
-        } else if (what == BluetoothUtils.DATA_MSG) {
-            DataMessage data = (DataMessage) msg.obj;
-            if (func == currentFunctionality) {
-
-            }
-        } else if (what == BluetoothUtils.CONNECTION_LOST_MSG) {
-
-        } else return false;
-        return true;
-    }
-
-    private class MyPagerAdapter extends FragmentStatePagerAdapter {
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments[position];
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return getResources().getString(Utils.medicalNames[position]);
-        }
+    public void setSwipeable(boolean swipeable) {
+        viewPager.setSwipeable(swipeable);
     }
 }

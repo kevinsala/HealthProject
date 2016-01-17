@@ -9,13 +9,14 @@ import java.util.UUID;
 public class Utils {
     public static final String LOG_TAG = "LOG-PEC";
 
-    public static final int ECG_FUNC = 2;
-    public static final int BLOOD_PRESSURE_FUNC = 1;
+
     public static final int RESPIRATORY_RATE_FUNC = 0;
+    public static final int BLOOD_PRESSURE_FUNC = 1;
+    public static final int ECG_FUNC = 2;
     public static final int LUNG_CAPACITY_FUNC = 4;
     public static final int TEMPERATURE_FUNC = 5;
     public static final int OXYGEN_SATURATION_FUNC = 6;
-    public static final int NULL_FUNC = -1;
+    public static final int NO_FUNC = -1;
 
     public static final int medicalIcons []= {
             R.mipmap.ecg,

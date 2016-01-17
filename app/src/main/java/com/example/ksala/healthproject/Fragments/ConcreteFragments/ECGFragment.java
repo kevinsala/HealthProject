@@ -73,7 +73,8 @@ public class ECGFragment extends CommonFragment {
         ecgChartLayout.addView(endEcgChart.getView());
     }
 
-    public void addData(double x, double y) {
+    @Override
+    public void addData(double x, double y, boolean finished) {
         middleEcgChart.addData(x, y);
     }
 

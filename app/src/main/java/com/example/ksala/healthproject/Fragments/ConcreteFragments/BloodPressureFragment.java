@@ -29,22 +29,28 @@ public class BloodPressureFragment extends CommonFragment {
     }
 
     @Override
-    public void startPressed() {
+    public void addData(double x, double y, boolean finished) {
+        assert (finished);
+    }
 
+    @Override
+    public void startPressed() {
+        getMainActivity().startMeasurement(Utils.BLOOD_PRESSURE_FUNC);
     }
 
     @Override
     public void cancelPressed() {
-
+        getMainActivity().cancelMeasurement(Utils.BLOOD_PRESSURE_FUNC);
     }
 
     @Override
     public void restartPressed() {
-
+        cancelPressed();
+        startPressed();
     }
 
     @Override
     public void mesurementEnded() {
-
+        getMainActivity().endMeasurement(Utils.BLOOD_PRESSURE_FUNC);
     }
 }

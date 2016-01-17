@@ -60,6 +60,8 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
         return rootView;
     }
 
+    public abstract void addData(double x, double y, boolean finished);
+
     public abstract void startPressed();
 
     public abstract void cancelPressed();

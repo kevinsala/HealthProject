@@ -17,20 +17,26 @@ import java.io.OutputStream;
  */
 public class ConnectionThread extends Thread {
     private final Handler handler;
-    private final BluetoothSocket socket;
     private final BluetoothDevice device;
+    private BluetoothSocket socket;
     private InputStream inputStream;
     private OutputStream outputStream;
 
     public ConnectionThread(BluetoothDevice device, Handler handler) {
-        BluetoothSocket tmpSocket = null;
-
         this.handler = handler;
         this.device = device;
 
+        init();
+    }
+
+    private void init() {
+        BluetoothSocket tmpSocket = null;
+
         try {
             tmpSocket = device.createRfcommSocketToServiceRecord(BluetoothUtils.MY_UUID);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            init();
+        }
 
         this.socket = tmpSocket;
     }
@@ -44,8 +50,10 @@ public class ConnectionThread extends Thread {
         done = setStreams();
         if (!done) connectionError("set-streams");
 
-        done = receive();
-        if (!done) connectionError("receive");
+        send(BluetoothUtils.START_MSG, 1);
+        send(BluetoothUtils.END_MSG, 1);
+
+        receive();
     }
 
     public boolean connectSocket() {
@@ -75,73 +83,79 @@ public class ConnectionThread extends Thread {
         return true;
     }
 
-    private boolean waitToSize(String buffer, int size) {
-        while (true) {
-            String aux = readBuffer();
-            if (aux == null) return false;
-            else buffer = buffer.concat(aux);
-
-            if (buffer.length() >= size) return true;
+    private String readNumChars(String buffer, int size) {
+        int sizeRead = buffer.length();
+        while (sizeRead < size) {
+            Log.d(Utils.LOG_TAG, "Here!");
+            String aux = readBuffer((size - sizeRead) * 2);
+            if (aux != null) {
+                buffer = buffer.concat(aux);
+                sizeRead += aux.length();
+            }
         }
+        return buffer;
     }
 
-    public boolean receive() {
+    public void receive() {
         String buffer = "";
+        double x, y;
 
         while (true) {
-            if (!waitToSize(buffer, 5)) break;
+            if (buffer.length() < 3) buffer = readNumChars(buffer, 3);
 
-            if (buffer.charAt(0) != 'M') break;
-            int size = Integer.parseInt(buffer.substring(1, 5));
+            assert(buffer.charAt(0) == 'M');
+            int size = Integer.parseInt(buffer.substring(1, 3));
+            if (buffer.length() < 3 + size) buffer = readNumChars(buffer, 3 + size);
 
-            if (!waitToSize(buffer, size + 5)) break;
-
-            int current = 5;
+            int current = 3;
 
             int func = Character.getNumericValue(buffer.charAt(current++));
             int type = Character.getNumericValue(buffer.charAt(current++));
 
-            if (type == BluetoothUtils.DATA_MSG) {
+            if (type == BluetoothUtils.DATA_MSG || type == BluetoothUtils.DATA_END_MSG) {
                 int start = current;
-                while(buffer.charAt(current) != '!') ++current;
-                int x = Integer.parseInt(buffer.substring(start, current));
+                while (buffer.charAt(current) != '!') ++current;
+                x = Double.parseDouble(buffer.substring(start, current));
 
                 start = ++current;
                 while(buffer.charAt(current) != 'X') ++current;
-                int y = Integer.parseInt(buffer.substring(start, current));
+                if (start != current) y = Double.parseDouble(buffer.substring(start, current));
+                else y = -1;
 
-                handler.obtainMessage(BluetoothUtils.DATA_MSG, func, 0, new DataMessage(x,y))
-                        .sendToTarget();
+                handler.obtainMessage(type, func, 0, new DataMessage(x,y)).sendToTarget();
             }
             else if (type == BluetoothUtils.END_MSG){
-                handler.obtainMessage(BluetoothUtils.END_MSG, func, 0).sendToTarget();
+                handler.obtainMessage(type, func, 0).sendToTarget();
             }
             else {
-                Log.d(Utils.LOG_TAG, "Bluetooth: Incorrecte MSG type");
+                Log.d(Utils.LOG_TAG, "Bluetooth: Incorrect MSG type");
             }
 
-            buffer = buffer.substring(5 + size);
+            Log.d(Utils.LOG_TAG, "Buffer: " + buffer);
+
+            buffer = buffer.substring(3 + size);
         }
-        return false;
     }
 
     public boolean send(int type, int func) {
         String msg = "M";
-        msg += "0003";
-        msg += Character.forDigit(func, 10);
-        msg += Character.forDigit(type, 10);
-        msg += 'X';
+        msg += new Character(Character.forDigit(func, 10)).toString();
+        msg += new Character(Character.forDigit(type, 10)).toString();
+        msg += "X";
+
+        Log.d(Utils.LOG_TAG, "MSG SENT: " + msg);
         return writeBuffer(msg);
     }
 
-    private String readBuffer() {
+    private String readBuffer(int size) {
         byte[] buffer = new byte[1024];
         int nBytes;
 
         try {
-            nBytes = inputStream.read(buffer);
+            nBytes = inputStream.read(buffer, 0, size);
             return new String(buffer, 0, nBytes, "UTF-8");
         } catch (IOException e) {
+            connectionError("receive");
             return null;
         }
     }
@@ -150,18 +164,18 @@ public class ConnectionThread extends Thread {
         try {
             byte [] buffer = msg.getBytes("UTF-8");
             outputStream.write(buffer);
+            return true;
         } catch (IOException e) {
-            cancel();
+            connectionError("receive");
             return false;
         }
-
-        return true;
     }
 
     public void connectionError(String error) {
         cancel();
         handler.obtainMessage(BluetoothUtils.CONNECTION_LOST_MSG, error).sendToTarget();
-        return;
+        init();
+        run();
     }
 
     public void cancel() {
