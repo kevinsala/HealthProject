@@ -26,7 +26,7 @@
 - [ ] Lung capacity.
   - [x] Read of the value
   - [ ] Calculate the overall capacity
-- [ ] ECG
+- [x] ECG
   - [x] Formula to compute the BPM
-  - [ ] Render the electrocardiography
+  - [x] Render the electrocardiography
 - [ ] Blood pressure
