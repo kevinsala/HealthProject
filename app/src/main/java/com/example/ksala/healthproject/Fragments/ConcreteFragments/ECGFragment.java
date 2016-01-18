@@ -11,22 +11,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.ksala.healthproject.Activities.ECGViewerActivity;
 import com.example.ksala.healthproject.Fragments.CommonFragment;
 import com.example.ksala.healthproject.R;
 import com.example.ksala.healthproject.Utils;
 import com.example.ksala.healthproject.Views.ECGChart;
+import com.github.mikephil.charting.charts.LineChart;
 
 public class ECGFragment extends CommonFragment {
 
-    private ECGChart middleEcgChart;
-    private ECGChart endEcgChart;
-    private Button openChartButton;
-
-    private FrameLayout middleFrame;
-    private FrameLayout endFrame;
-    private RelativeLayout ecgEndLayout;
+    private FrameLayout frame;
+    private ECGChart ecgChart;
+    private TextView bpmTextView;
+    private boolean running;
 
     public ECGFragment() {
 
@@ -36,83 +35,70 @@ public class ECGFragment extends CommonFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        middleEcgChart = new ECGChart(getContext(), ECGChart.PORTRAIT);
-        middleEcgChart.setScrollable(true);
-
-        for (int i = 0; i < 50; ++i) {
-            for (int j = 0; j < 50; ++j)
-                middleEcgChart.addData(i*100 + j, -25 + j);
-            for (int j = 0; j < 50; ++j)
-                middleEcgChart.addData(i*100 + j + 50, 25 - j);
-        }
+        running = false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
-
         startText.setText(Utils.ECG_INSTRUCTIONS);
 
-        middleFrame = (FrameLayout) rootView.findViewById(R.id.middleFrame);
-        endFrame = (FrameLayout) rootView.findViewById(R.id.endFrame);
+        frame = (FrameLayout) rootView.findViewById(R.id.middleFrame);
+        RelativeLayout ecgLayout = (RelativeLayout) inflater.inflate(R.layout.ecg_layout, null);
+        frame.addView(ecgLayout);
 
-        middleFrame.addView(middleEcgChart.getView());
+        LineChart lineChart = (LineChart) rootView.findViewById(R.id.ecgChart);
+        ecgChart = new ECGChart(lineChart);
+
+        bpmTextView = (TextView) rootView.findViewById(R.id.bpmText);
 
         return rootView;
     }
 
-    private void initEcgEndLayout() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-
-        ecgEndLayout = (RelativeLayout) inflater.inflate(R.layout.ecg_layout, null);
-        openChartButton = (Button) ecgEndLayout.findViewById(R.id.openChartButton);
-        openChartButton.setOnClickListener(this);
-        RelativeLayout ecgChartLayout = (RelativeLayout) ecgEndLayout.findViewById(R.id.ecgChartLayout);
-        ecgChartLayout.addView(endEcgChart.getView());
-    }
-
     @Override
     public void addData(double x, double y, boolean finished) {
-        middleEcgChart.addData(x, y);
+        ecgChart.addData(x, y);
+
+        if (finished) {
+            bpmTextView.setText(String.format( "%.1f BPM", ecgChart.getBPM() ));
+            cancelButton.setText(getResources().getString(R.string.restart));
+            cancelButton.setVisibility(View.VISIBLE);
+            running = false;
+        }
     }
 
     @Override
     public void startPressed() {
-        middleEcgChart.setScrollable(true);
+        getMainActivity().startMeasurement(Utils.ECG_FUNC);
+        running = true;
+        cancelButton.setVisibility(View.INVISIBLE);
+        cancelButton.setText(getResources().getString(R.string.cancel));
     }
 
     @Override
     public void cancelPressed() {
-        middleEcgChart.clearData();
+        getMainActivity().cancelMeasurement(Utils.ECG_FUNC);
+        running = false;
+        ecgChart.clearData();
+        bpmTextView.setText(getResources().getString(R.string.bpm_value));
     }
 
     @Override
     public void restartPressed() {
-        endEcgChart.clearData();
-        middleEcgChart.clearData();
+        ecgChart.clearData();
+        bpmTextView.setText(getResources().getString(R.string.bpm_value));
+        startPressed();
     }
 
     @Override
     public void mesurementEnded() {
-        if (ecgEndLayout == null) {
-            endEcgChart = new ECGChart(getContext(), ECGChart.PORTRAIT, middleEcgChart.getData());
-            initEcgEndLayout();
-            endFrame.addView(ecgEndLayout);
-        } else endEcgChart.setData(middleEcgChart.getData());
-        endEcgChart.setScrollable(false);
-        super.mesurementEnded();
+
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.openChartButton) {
-            middleEcgChart.clearData();
-            Intent intent = new Intent(getContext(), ECGViewerActivity.class);
-            intent.putExtra("chart-series", endEcgChart.getData());
-            startActivity(intent);
-        }
+        if (v.getId() == R.id.cancelButton && !running) restartPressed();
         else super.onClick(v);
     }
 }

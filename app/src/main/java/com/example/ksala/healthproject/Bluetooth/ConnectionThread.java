@@ -50,9 +50,6 @@ public class ConnectionThread extends Thread {
         done = setStreams();
         if (!done) connectionError("set-streams");
 
-        send(BluetoothUtils.START_MSG, 1);
-        send(BluetoothUtils.END_MSG, 1);
-
         receive();
     }
 
@@ -86,7 +83,6 @@ public class ConnectionThread extends Thread {
     private String readNumChars(String buffer, int size) {
         int sizeRead = buffer.length();
         while (sizeRead < size) {
-            Log.d(Utils.LOG_TAG, "Here!");
             String aux = readBuffer((size - sizeRead) * 2);
             if (aux != null) {
                 buffer = buffer.concat(aux);
@@ -139,9 +135,9 @@ public class ConnectionThread extends Thread {
 
     public boolean send(int type, int func) {
         String msg = "M";
-        msg += new Character(Character.forDigit(func, 10)).toString();
-        msg += new Character(Character.forDigit(type, 10)).toString();
-        msg += "X";
+        msg = msg.concat(new Character(Character.forDigit(func, 10)).toString());
+        msg = msg.concat(new Character(Character.forDigit(type, 10)).toString());
+        msg = msg.concat("X");
 
         Log.d(Utils.LOG_TAG, "MSG SENT: " + msg);
         return writeBuffer(msg);
@@ -162,7 +158,8 @@ public class ConnectionThread extends Thread {
 
     private boolean writeBuffer(String msg) {
         try {
-            byte [] buffer = msg.getBytes("UTF-8");
+            byte [] buffer = msg.getBytes();
+            Log.d(Utils.LOG_TAG, "MSG BYTES: " + buffer.length);
             outputStream.write(buffer);
             return true;
         } catch (IOException e) {
@@ -174,6 +171,11 @@ public class ConnectionThread extends Thread {
     public void connectionError(String error) {
         cancel();
         handler.obtainMessage(BluetoothUtils.CONNECTION_LOST_MSG, error).sendToTarget();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         init();
         run();
     }

@@ -2,104 +2,95 @@ package com.example.ksala.healthproject.Views;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.ksala.healthproject.Utils;
-
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
-
-import java.io.Serializable;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 public class ECGChart {
 
-    public static final int LANDSCAPE = 0;
-    public static final int PORTRAIT = 1;
+    private LineChart mChart;
+    private int beats;
+    private long totalTime;
 
-    private static final double LANDSCAPE_MAX = 1000;
-    private static final double PORTRAIT_MAX = 500;
+    public ECGChart(LineChart lineChart) {
 
-    private XYSeries series;
-    private XYMultipleSeriesDataset dataset;
-    private XYSeriesRenderer renderer = new XYSeriesRenderer();
-    private XYMultipleSeriesRenderer multipleRenderer;
-    private GraphicalView chartView;
+        beats = 0;
+        totalTime = 0;
 
-    public ECGChart(Context context, int orientation) {
-        series = new XYSeries("Electrocardiograma");
-        init(context, orientation);
-    }
+        mChart = lineChart;
+        mChart.setDrawGridBackground(false);
+        mChart.setDescription("");
+        // add an empty data object
+        mChart.setData(new LineData());
+        //mChart.getXAxis().setDrawLabels(false);
+        //mChart.getXAxis().setDrawGridLines(false);
 
-    public ECGChart(Context context, int orientation, XYSeries series) {
-        this.series = series;
-        init(context, orientation);
-    }
-
-    private void init(Context context, int orientation) {
-        dataset = new XYMultipleSeriesDataset();
-        renderer = new XYSeriesRenderer();
-        multipleRenderer = new XYMultipleSeriesRenderer();
-
-        renderer.setLineWidth(5);
-        renderer.setColor(Color.RED);
-        renderer.setDisplayBoundingPoints(false);
-
-        multipleRenderer.addSeriesRenderer(renderer);
-        multipleRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00));
-        multipleRenderer.setPanEnabled(true, false);
-        multipleRenderer.setZoomEnabled(false, false);
-        multipleRenderer.setClickEnabled(false);
-        multipleRenderer.setYAxisMax(30);
-        multipleRenderer.setYAxisMin(-30);
-        multipleRenderer.setXAxisMin(0);
-        double max = (orientation == PORTRAIT) ? PORTRAIT_MAX : LANDSCAPE_MAX;
-        multipleRenderer.setXAxisMax(max);
-        multipleRenderer.setAntialiasing(false);
-        multipleRenderer.setShowGrid(true);
-        multipleRenderer.setGridColor(ContextCompat.getColor(context, android.R.color.darker_gray));
-        multipleRenderer.setShowLegend(false);
-
-        dataset = new XYMultipleSeriesDataset();
-        dataset.addSeries(series);
-
-        chartView = ChartFactory.getLineChartView(context, dataset, multipleRenderer);
-        double [] panLimits = {0, 2000, 0, 0};
-        multipleRenderer.setPanLimits(panLimits);
+        mChart.invalidate();
     }
 
     public void addData(double x, double y) {
-        series.add(x, y);
-    }
 
-    public XYSeries getData() {
-        return series;
-    }
+        if (y >= 1020) ++beats;
+        totalTime = (long) x;
 
-    public void setData(XYSeries series) {
-        this.series.clear();
-        dataset.clear();
-        dataset.addSeries(series);
-        chartView.repaint();
+        LineData data = mChart.getData();
+
+        if(data != null) {
+
+            LineDataSet set = data.getDataSetByIndex(0);
+            // set.addEntry(...); // can be called as well
+
+            if (set == null) {
+                set = createSet();
+                data.addDataSet(set);
+            }
+
+            // add a new x-value first
+            data.addXValue(x + "");
+
+            data.addEntry(new Entry((float) y, data.getXValCount() - 1), 0);
+
+            // let the chart know it's data has changed
+            mChart.notifyDataSetChanged();
+
+            mChart.setVisibleXRangeMaximum(70);
+            mChart.setVisibleYRangeMaximum(2000, YAxis.AxisDependency.LEFT);
+//
+//          // this automatically refreshes the chart (calls invalidate())
+            mChart.moveViewTo(data.getXValCount()-7, 50f, YAxis.AxisDependency.LEFT);
+
+            Log.d(Utils.LOG_TAG, "" + y);
+        }
     }
 
     public void clearData() {
-        series.clearSeriesValues();
-        chartView.repaint();
+        beats = 0;
+        totalTime = 0;
+        mChart.clear();
+        mChart.setData(new LineData());
     }
 
-    public GraphicalView getView() {
-        return chartView;
+    public LineChart getView() {
+        return mChart;
     }
 
+    public double getBPM() {
+        return (double) beats / ((double) totalTime / (double) 60000);
+    }
 
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "Electrocardiography");
+        set.setLineWidth(2.5f);
+        set.setColor(Color.rgb(240, 99, 99));
+        set.setCircleSize(0);
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setValueTextSize(0f);
 
-    public void setScrollable(boolean scrollable) {
-        multipleRenderer.setPanEnabled(scrollable, false);
+        return set;
     }
 }

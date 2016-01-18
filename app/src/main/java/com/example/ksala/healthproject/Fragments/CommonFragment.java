@@ -44,6 +44,7 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
         middleLayout = (RelativeLayout) rootView.findViewById(R.id.middleLayout);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
+        cancelButton.setVisibility(View.INVISIBLE);
 
         endLayout = (RelativeLayout) rootView.findViewById(R.id.endLayout);
         restartButton = (Button) rootView.findViewById(R.id.restartButton);

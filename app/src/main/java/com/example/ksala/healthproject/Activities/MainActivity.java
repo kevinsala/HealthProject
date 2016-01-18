@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     /** MEASUREMENT METHODS **/
     public void startMeasurement(int functionality) {
+        mainHandler.removeMessages(BluetoothUtils.DATA_MSG);
+        mainHandler.removeMessages(BluetoothUtils.DATA_END_MSG);
         boolean sent = connectionThread.send(BluetoothUtils.START_MSG, functionality);
         if (!sent) Log.d(Utils.LOG_TAG, "Start measurement failed");
         currentFunctionality = functionality;
@@ -84,28 +86,24 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     /** HANDLING MESSAGES **/
     @Override
     public boolean handleMessage(Message msg) {
-        int what = msg.what;
+        int type = msg.what;
         int func = msg.arg1;
 
-        if (what == BluetoothUtils.CONNECTION_STARTED_MSG) bluetoothConnected = true;
-
-        else if (what == BluetoothUtils.DATA_MSG || what == BluetoothUtils.DATA_END_MSG) {
-            assert(func != 3 && func > 0 && func < 7);
-
+        if (type == BluetoothUtils.CONNECTION_STARTED_MSG)
+            bluetoothConnected = true;
+        else if (type == BluetoothUtils.DATA_MSG || type == BluetoothUtils.DATA_END_MSG) {
             DataMessage data = (DataMessage) msg.obj;
             if (func == currentFunctionality) {
-                if (what == BluetoothUtils.DATA_MSG) {
-                    assert (func == Utils.ECG_FUNC);
-                    ((CommonFragment) fragments[func]).addData(data.x, data.y, false);
-                }
-                else {
-                    ((CommonFragment) fragments[func]).addData(data.x, data.y, true);
-                }
+                boolean finished = (type == BluetoothUtils.DATA_END_MSG);
+
+                CommonFragment fragment = (CommonFragment) fragments[func];
+                fragment.addData(data.x, data.y, finished);
+
+                if (finished) currentFunctionality = Utils.NO_FUNC;
             }
         }
-
-        else if (what == BluetoothUtils.CONNECTION_LOST_MSG) bluetoothConnected = false;
-
+        else if (type == BluetoothUtils.CONNECTION_LOST_MSG)
+            bluetoothConnected = false;
         else return false;
 
         return true;

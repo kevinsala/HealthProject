@@ -15,5 +15,5 @@
     <string name="restart">Restart</string>
     <string name="startTitle">Recorda els passos a seguir:\n\n</string>
     <string name="openChart">Click to open</string>
-    <string name="preview">Preview</string>
+    <string name="bpm_value">BPM: Wait please...</string>
 </resources>
