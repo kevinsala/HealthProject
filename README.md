@@ -20,10 +20,12 @@
   - [ ] Formula transformation to *spo2* percentage
 - [x] RGB Led Color picker
 - [x] LED control (**MUX**) for determining which feature is being used
-- [ ] Bluetooh communication with Android
+- [x] Bluetooh communication with Android
 - [x] Body temperature sensor
 - [ ] Lung capacity.
   - [x] Read of the value
   - [ ] Calculate the overall capacity
 - [ ] ECG
+  - [x] Formula to compute the BPM
+  - [ ] Render the electrocardiography
 - [ ] Blood pressure
