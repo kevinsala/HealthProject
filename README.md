@@ -22,6 +22,7 @@
 - [x] LED control (**MUX**) for determining which feature is being used
 - [x] Bluetooh communication with Android
 - [x] Body temperature sensor
+- [ ] Respiratory rate
 - [ ] Lung capacity.
   - [x] Read of the value
   - [ ] Calculate the overall capacity
