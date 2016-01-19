@@ -16,7 +16,32 @@ LungCapacity::LungCapacity(int reqCode)
 
 float LungCapacity::measure()
 {
+	float refPressure = singleMeasure();
+	float sMeasure = singleMeasure();
 
+	// Wait user to start
+	while(sMeasure < refPressure) 
+		sMeasure = singleMeasure();
+
+	// user has started the test
+	float resCapacity = 0;
+	// keep measuring until user has finished
+	while(sMeasure > refPressure) {
+		// transform measure pressure to volume (L)
+		float sCapacity = sMeasure;
+		resCapacity += sCapacity;
+
+		//measure another sample
+		delay(1);
+		i++;
+		sMeasure = singleMeasure();
+	}
+
+	return resCapacity;
+
+}
+
+float LungCapacity::singleMeasure() {
 	Wire.requestFrom(_reqCode, 2);	//Request 2 bytes from slave device 0x28 (our Honeywell)
 	float presValue= 0;
   	while (Wire.available()) {	//Slave may send less than requested
@@ -35,7 +60,6 @@ float LungCapacity::measure()
   	}
 
   	return presValue;
-
 }
 
 //Custom version of the map function that supports floats
