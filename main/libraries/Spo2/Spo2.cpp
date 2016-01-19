@@ -24,7 +24,7 @@ void Spo2::setup() {
   digitalWrite(_IRLedPin, LOW);
 }
 
-int Spo2::measure()
+double Spo2::measure()
 {
   int RedValue, IRValue;
   digitalWrite(_IRLedPin, LOW);
@@ -46,8 +46,8 @@ int Spo2::measure()
     Serial.print(" || IRLed: ");
     Serial.println(IRValue);
   }
-  float R = RedValue/IRValue;
-  int res = (int) (-22.6 * R + 95.852);
+  double R = RedValue/IRValue;
+  double res = (int) (-22.6 * R + 95.852);
   
   return res;
 }

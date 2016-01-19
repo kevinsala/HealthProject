@@ -179,7 +179,7 @@ void playOxygenSaturation()
   ledmux.power_on(7);
   
   Serial.println("SPO2");
-  int bloodoxy = spo2.measure();
+  double bloodoxy = spo2.measure();
   Serial.println(bloodoxy);
   
   ledmux.power_off();
