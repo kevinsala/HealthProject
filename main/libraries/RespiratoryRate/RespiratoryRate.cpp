@@ -10,7 +10,7 @@
 
 RespiratoryRate::RespiratoryRate()
 {
-  _tempSensor = TempSensor(0x29);
+  _tempSensor = TempSensor();
 
 }
 
@@ -18,13 +18,25 @@ void RespiratoryRate::setup() {
   _tempSensor.setup();
 }
 
-void RespiratoryRate::measure() {
-
+int RespiratoryRate::measure() {
+	int res, respCount = 0;
+	float tmpAmbient = singleMeasure();
+	unsigned long elapsed, current, start = millis();
+	current = start;
+	while(respCount < 5 & elapsed > 30000) {
+		float tmpCurr = singleMeasure();
+		if(tmpCurr - tmpAmbient > RespIncrease) 
+			++respCount;
+		current=millis();
+		elapsed = current-start;
+	}
+	return int((respCount/elapsed)*60);
 }
 
-void RespiratoryRate::singleMeasure() {
+float RespiratoryRate::singleMeasure() {
   _tempSensor.shutdown_wake(0);
   float c = _tempSensor.readTempC();
   Serial.print("Temp: "); Serial.print(c);
   _tempSensor.shutdown_wake(1);
+  return c;
 }

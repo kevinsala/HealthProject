@@ -33,7 +33,6 @@ float LungCapacity::measure()
 
 		//measure another sample
 		delay(1);
-		i++;
 		sMeasure = singleMeasure();
 	}
 
@@ -43,7 +42,7 @@ float LungCapacity::measure()
 
 float LungCapacity::singleMeasure() {
 	Wire.requestFrom(_reqCode, 2);	//Request 2 bytes from slave device 0x28 (our Honeywell)
-	float presValue= 0;
+	float presValue = 0;
   	while (Wire.available()) {	//Slave may send less than requested
 	    byte one = Wire.read();
 	    byte two = Wire.read();

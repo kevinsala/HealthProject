@@ -8,16 +8,18 @@
 #define RespiratoryRate_h
 #include "Arduino.h"
 #include "TempSensor.h"
+#define RespIncrease 0.5
 
 class RespiratoryRate
 {
   private:
 	TempSensor _tempSensor;
-    
+    float singleMeasure();
+
  public:
     RespiratoryRate();
     void setup();
-	void measure();
+	int measure();
 };
 
 #endif

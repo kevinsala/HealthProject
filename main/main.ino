@@ -11,6 +11,7 @@
 #include "LungCapacity.h"
 #include "Bluetooth.h"
 #include "Ecg.h"
+#include "RespiratoryRate.h"
 
 /* RGB LED INTERFACE */
 #define RgbClockPin 5
@@ -56,6 +57,7 @@ LedMux ledmux(LedMuxA, LedMuxB, LedMuxC);
 TempSensor tempsensor = TempSensor();
 Ecg ecg = Ecg();
 Bluetooth bluetooth = Bluetooth();
+RespiratoryRate respRate;
 
 int currentFunc;
 
@@ -68,6 +70,7 @@ void setup() {
   ledmux.setup();
   spo2.setup();
   rgb_led.setup();
+  respRate.setup();
   ledmux.power_off();
 }
 
@@ -98,7 +101,10 @@ void loop() {
 void playRespiratoryRate()
 {
   ledmux.power_on(2);
-  delay(1000);
+  
+  int c = respRate.measure();
+  Serial.print("Temp: "); Serial.print(c);
+  
   ledmux.power_off();
   currentFunc = NO_FUNC;
 }
