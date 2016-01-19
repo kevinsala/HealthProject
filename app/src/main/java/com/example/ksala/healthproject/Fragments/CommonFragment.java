@@ -14,13 +14,13 @@ import com.example.ksala.healthproject.Utils;
 public abstract class CommonFragment extends AbstractFragment implements View.OnClickListener {
 
     public static int START_PAGE = 0;
-    public static int MIDDLE_PAGE = 1;
-    public static int END_PAGE = 2;
+    public static int MEASUREMENT_PAGE = 1;
 
-    protected RelativeLayout startLayout, middleLayout, endLayout;
-    protected Button startButton, cancelButton, restartButton, menuButton;
+    protected RelativeLayout startLayout, measurementLayout;
+    protected Button startButton, restartButton;
     protected TextView startText;
-    protected int fragmentPage = 0;
+    protected int fragmentPage;
+    protected boolean running;
 
     public CommonFragment() {
 
@@ -29,6 +29,9 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fragmentPage = START_PAGE;
+        running = false;
     }
 
     @Override
@@ -41,20 +44,13 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
         startButton = (Button) rootView.findViewById(R.id.startButton);
         startButton.setOnClickListener(this);
 
-        middleLayout = (RelativeLayout) rootView.findViewById(R.id.middleLayout);
-        cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(this);
-        cancelButton.setVisibility(View.INVISIBLE);
-
-        endLayout = (RelativeLayout) rootView.findViewById(R.id.endLayout);
+        measurementLayout = (RelativeLayout) rootView.findViewById(R.id.measurementLayout);
         restartButton = (Button) rootView.findViewById(R.id.restartButton);
         restartButton.setOnClickListener(this);
-        menuButton = (Button) rootView.findViewById(R.id.menuButton);
-        menuButton.setOnClickListener(this);
+        restartButton.setVisibility(((fragmentPage == MEASUREMENT_PAGE && !running) ? View.VISIBLE : View.INVISIBLE));
 
         startLayout.setVisibility(((fragmentPage == START_PAGE) ? View.VISIBLE : View.INVISIBLE));
-        middleLayout.setVisibility(((fragmentPage == MIDDLE_PAGE) ? View.VISIBLE : View.INVISIBLE));
-        endLayout.setVisibility(((fragmentPage == END_PAGE) ? View.VISIBLE : View.INVISIBLE));
+        measurementLayout.setVisibility(((fragmentPage == MEASUREMENT_PAGE) ? View.VISIBLE : View.INVISIBLE));
 
         startText = (TextView) rootView.findViewById(R.id.startText);
 
@@ -65,17 +61,11 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
 
     public abstract void startPressed();
 
-    public abstract void cancelPressed();
-
     public abstract void restartPressed();
 
     public void mesurementEnded() {
-        fragmentPage = END_PAGE;
+        running = false;
         getMainActivity().setSwipeable(true);
-        middleLayout.setAnimation(Utils.outGoUp(350));
-        endLayout.setAnimation(Utils.inGoUp(350));
-        endLayout.setVisibility(View.VISIBLE);
-        middleLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -83,33 +73,25 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
         int id = v.getId();
         if (id == R.id.startButton) {
             startPressed();
-            fragmentPage = MIDDLE_PAGE;
+            running = true;
+            fragmentPage = MEASUREMENT_PAGE;
             getMainActivity().setSwipeable(false);
+            restartButton.setVisibility(View.INVISIBLE);
             startLayout.setAnimation(Utils.outGoUp(350));
-            middleLayout.setAnimation(Utils.inGoUp(350));
+            measurementLayout.setAnimation(Utils.inGoUp(350));
             startLayout.setVisibility(View.INVISIBLE);
-            middleLayout.setVisibility(View.VISIBLE);
-        }
-        else if (id == R.id.cancelButton) {
-            fragmentPage = START_PAGE;
-            getMainActivity().setSwipeable(true);
-            middleLayout.setAnimation(Utils.outGoDown(350));
-            startLayout.setAnimation(Utils.inGoDown(350));
-            middleLayout.setVisibility(View.INVISIBLE);
-            startLayout.setVisibility(View.VISIBLE);
-            cancelPressed();
+            measurementLayout.setVisibility(View.VISIBLE);
         }
         else if (id == R.id.restartButton) {
             restartPressed();
-            fragmentPage = MIDDLE_PAGE;
+            running = true;
+            fragmentPage = MEASUREMENT_PAGE;
             getMainActivity().setSwipeable(false);
-            middleLayout.setAnimation(Utils.inGoDown(350));
-            endLayout.setAnimation(Utils.outGoDown(350));
-            middleLayout.setVisibility(View.VISIBLE);
-            endLayout.setVisibility(View.INVISIBLE);
+            restartButton.setVisibility(View.INVISIBLE);
         }
-        else if (id == R.id.menuButton) {
-            getMainActivity().onBackPressed();
-        }
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

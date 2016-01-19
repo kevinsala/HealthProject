@@ -2,14 +2,21 @@ package com.example.ksala.healthproject.Fragments.ConcreteFragments;
 
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.ksala.healthproject.Fragments.CommonFragment;
+import com.example.ksala.healthproject.R;
 import com.example.ksala.healthproject.Utils;
 
 public class TemperatureFragment extends CommonFragment {
+
+    private TextView measurementTextView;
 
     public TemperatureFragment() {
 
@@ -25,32 +32,35 @@ public class TemperatureFragment extends CommonFragment {
                              Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         startText.setText(Utils.TEMPERATURE_INSTRUCTIONS);
+
+        RelativeLayout measurementFrame = (RelativeLayout) rootView.findViewById(R.id.measurementFrame);
+        measurementTextView = new TextView(getActivity());
+        measurementTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        measurementTextView.setText(getResources().getString(R.string.temp_value));
+        measurementFrame.addView(measurementTextView);
+        RelativeLayout.LayoutParams layoutParams =
+                (RelativeLayout.LayoutParams) measurementTextView.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
         return rootView;
     }
 
     @Override
     public void addData(double x, double y, boolean finished) {
-        assert (finished);
+        if (finished) {
+            measurementTextView.setText(String.format( "%.1f ºC", x));
+            mesurementEnded();
+        }
     }
 
     @Override
     public void startPressed() {
-        getMainActivity().startMeasurement(Utils.BLOOD_PRESSURE_FUNC);
-    }
-
-    @Override
-    public void cancelPressed() {
-        getMainActivity().cancelMeasurement(Utils.BLOOD_PRESSURE_FUNC);
+        getMainActivity().startMeasurement(Utils.TEMPERATURE_FUNC);
     }
 
     @Override
     public void restartPressed() {
-        cancelPressed();
+        measurementTextView.setText(getResources().getString(R.string.temp_value));
         startPressed();
-    }
-
-    @Override
-    public void mesurementEnded() {
-        getMainActivity().endMeasurement(Utils.BLOOD_PRESSURE_FUNC);
     }
 }

@@ -39,18 +39,18 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/middleLayout"
+        android:id="@+id/measurementLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/margin">
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/restartButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/cancel" />
+            android:text="@string/restart" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
@@ -60,55 +60,15 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin"
             android:layout_marginBottom="@dimen/margin"
-            android:layout_above="@id/cancelButton"
+            android:layout_above="@id/restartButton"
             android:visibility="invisible"/>
 
-        <FrameLayout
-            android:id="@+id/middleFrame"
+        <RelativeLayout
+            android:id="@+id/measurementFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/cancelButton"
-            android:layout_marginBottom="@dimen/margin"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/endLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/margin"
-        android:background="@android:color/holo_blue_dark">
-
-        <LinearLayout
-            android:id="@+id/endButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" >
-
-            <Button
-                android:id="@+id/restartButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="20dp"
-                android:text="@string/restart" />
-
-            <Button
-                android:id="@+id/menuButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:text="@string/menu" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/endFrame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/endButtons">
-
-        </FrameLayout>
+            android:layout_above="@id/restartButton"
+            android:layout_marginBottom="@dimen/margin" />
     </RelativeLayout>
 
 </RelativeLayout>

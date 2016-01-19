@@ -3,6 +3,10 @@ package com.example.ksala.healthproject.Activities;
 import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -60,8 +64,19 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         setCurrentPage(MAIN_PAGE);
         ((PagerTitleStrip) findViewById(R.id.pagerTitleStrip)).setTextSpacing(540);
         ((PagerTitleStrip) findViewById(R.id.pagerTitleStrip)).setGravity(Gravity.CENTER);
+
+        // Register for broadcasts on BluetoothAdapter state change
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Unregister broadcast listeners
+        unregisterReceiver(mReceiver);
+    }
 
     /** MEASUREMENT METHODS **/
     public void startMeasurement(int functionality) {
@@ -116,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         if (bluetoothAdapter == null) finish();
         if (!bluetoothAdapter.isEnabled())
             bluetoothAdapter.enable();
+    }
 
+    public void connectToDevice() {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         /* If there are paired devices */
         if (pairedDevices.size() > 0) {
@@ -125,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 if (BluetoothUtils.DEVICE_NAME.equals(device.getName())) {
                     Log.d(Utils.LOG_TAG, "Bluetooth device found in paired devices");
                     bluetoothDevice = device;
-                    connectToDevice();
+                    connectionThread = new ConnectionThread(bluetoothDevice, mainHandler);
+                    connectionThread.start();
                     return;
                 }
             }
@@ -133,10 +151,25 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         Log.d(Utils.LOG_TAG, "Bluetooth device not paired! Please connect to it through Settings");
     }
 
-    public void connectToDevice() {
-        connectionThread = new ConnectionThread(bluetoothDevice, mainHandler);
-        connectionThread.start();
-    }
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        bluetoothConnected = false;
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        connectToDevice();
+                        break;
+                }
+            }
+        }
+    };
 
 
     /** PAGES CONFIGURATION **/

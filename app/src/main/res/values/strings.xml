@@ -15,5 +15,12 @@
     <string name="restart">Restart</string>
     <string name="startTitle">Recorda els passos a seguir:\n\n</string>
     <string name="openChart">Click to open</string>
-    <string name="bpm_value">BPM: Wait please...</string>
+
+    <!-- Default values -->
+    <string name="rr_value">Breaths per minute: Wait please...</string>
+    <string name="bp_value">Blood pressure: Wait please...</string>
+    <string name="ecg_value">Beats per minute: Wait please...</string>
+    <string name="lc_value">Lung capacity: Wait please...</string>
+    <string name="temp_value">Degrees Celsius: Wait please...</string>
+    <string name="o2_value">Oxygen saturation: Wait please...</string>
 </resources>

@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:paddingBottom="20dp"
-        android:text="@string/bpm_value"
+        android:text="@string/ecg_value"
         android:textSize="18sp"/>
 
     <com.github.mikephil.charting.charts.LineChart
