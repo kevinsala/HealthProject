@@ -68,7 +68,6 @@ void setup() {
   ledmux.setup();
   spo2.setup();
   rgb_led.setup();
-
   ledmux.power_off();
 }
 

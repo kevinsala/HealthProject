@@ -21,6 +21,7 @@ class Spo2
     
  public:
     Spo2(int fotoSensor, int redLed, int IRLed);
+    void setup();
 	int measure();
 };
 
