@@ -16,6 +16,7 @@ class LedMux
     
  public:
     LedMux(int muxA, int muxB, int muxC);
+    void setup();
 	void power_on(int lednum);
 	void power_off();
 };

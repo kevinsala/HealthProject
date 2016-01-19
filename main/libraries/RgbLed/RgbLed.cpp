@@ -14,6 +14,9 @@ RgbLed::RgbLed(int dp, int lp, int ep, int cp)
   _EnablePin = ep;
   _ClockPin = cp;
 
+}
+
+void RgbLed::setup() {
   pinMode(_DataPin,OUTPUT);
   pinMode(_LatchPin,OUTPUT);
   pinMode(_EnablePin,OUTPUT);
@@ -73,6 +76,7 @@ void RgbLed::latch()
 
 void RgbLed::off()
 {
+  sendColor(0, 0, 0);
   digitalWrite(_ClockPin, LOW);
   digitalWrite(_DataPin, LOW);
   digitalWrite(_LatchPin, LOW);

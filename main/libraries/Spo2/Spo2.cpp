@@ -15,11 +15,13 @@ Spo2::Spo2(int fotoSensor, int redLed, int IRLed)
   _RedLedPin = redLed;
   _IRLedPin = IRLed;
   
+}
+
+void Spo2::setup() {
   pinMode(_RedLedPin,OUTPUT);
   pinMode(_IRLedPin,OUTPUT);
   digitalWrite(_RedLedPin, LOW);
   digitalWrite(_IRLedPin, LOW);
-  
 }
 
 int Spo2::measure()

@@ -17,6 +17,7 @@ class RgbLed
     void latch();
  public:
     RgbLed(int dp, int lp, int ep, int cp);
+    void setup();
 	void sendColor(long r, long g, long b);
 	void off();
 };

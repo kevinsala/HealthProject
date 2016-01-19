@@ -13,6 +13,9 @@ LedMux::LedMux(int muxA, int muxB, int muxC)
   _muxBPin = muxB;
   _muxCPin = muxC;
 
+}
+
+void LedMux::setup() {
   pinMode(_muxAPin,OUTPUT);
   pinMode(_muxBPin,OUTPUT);
   pinMode(_muxCPin,OUTPUT);
