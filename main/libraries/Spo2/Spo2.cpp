@@ -49,5 +49,10 @@ double Spo2::measure()
   double R = (double) RedValue/ (double) IRValue;
   double res = (double) -22.6 * R + 95.842;
   
+  if(res < 73.0)
+    res = 0;
+  else
+    res += 24;
+
   return res;
 }
