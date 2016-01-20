@@ -11,12 +11,13 @@ class LungCapacity
 {
   private:
 	int _reqCode;
-    float mapFloat(float x, float in_min, float in_max, float out_min, float out_max);
-    float singleMeasure();
+	double refPressure;
+    double mapDouble(double x, double in_min, double in_max, double out_min, double out_max);
+    double singleMeasure();
 
  public:
     LungCapacity(int reqCode);
-	float measure();
+	double measure();
 };
 
 #endif

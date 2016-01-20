@@ -58,6 +58,7 @@ TempSensor tempsensor = TempSensor();
 Ecg ecg = Ecg();
 Bluetooth bluetooth = Bluetooth();
 RespiratoryRate respRate;
+LungCapacity lungCap(0x28);
 
 int currentFunc;
 
@@ -103,7 +104,7 @@ void playRespiratoryRate()
   ledmux.power_on(2);
   
   int c = respRate.measure();
-  Serial.print("Temp: "); Serial.print(c);
+  Serial.print("RespiratoryRate: "); Serial.print(c);
 
   bluetooth.sendData(RESPIRATORY_RATE_FUNC, c, true);
   
@@ -159,6 +160,11 @@ void playLungCapacity()
 {
   ledmux.power_on(5);
   delay(1000);
+  double c = lungCap.measure();
+  Serial.print("LungCapacity: "); Serial.print(c);
+
+  bluetooth.sendData(LUNG_CAPACITY_FUNC, c, true);
+  
   ledmux.power_off();
   currentFunc = NO_FUNC;
 }
