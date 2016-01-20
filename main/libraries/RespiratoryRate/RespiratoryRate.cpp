@@ -19,12 +19,13 @@ void RespiratoryRate::setup(TempSensor tempSensor) {
 
 int RespiratoryRate::measure() {
 	int res, respCount = 0;
-	float tmpAmbient = singleMeasure();
+	delay(10000);
+	float tmpLst = singleMeasure();
 	unsigned long elapsed = 0, current, start = millis();
 	current = start;
 	while(respCount < 5 and elapsed < 30000) {
 		float tmpCurr = singleMeasure();
-		if(tmpCurr - tmpAmbient > RespIncrease) 
+		if(tmpCurr > tmpLst) 
 			++respCount;
 		current=millis();
 		elapsed = current-start;

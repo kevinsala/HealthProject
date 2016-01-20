@@ -8,7 +8,6 @@
 #define RespiratoryRate_h
 #include "Arduino.h"
 #include "TempSensor.h"
-#define RespIncrease 0.5
 
 class RespiratoryRate
 {
