@@ -72,6 +72,7 @@ void setup() {
   spo2.setup();
   rgb_led.setup();
   respRate.setup();
+  lungCap.setup();
   ledmux.power_off();
 }
 

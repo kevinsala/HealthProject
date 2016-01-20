@@ -11,7 +11,10 @@
 LungCapacity::LungCapacity(int reqCode)
 {
 	_reqCode = reqCode;
-  	refPressure = singleMeasure();
+}
+
+void LungCapacity::setup() {
+	refPressure = singleMeasure();
 }
 
 double LungCapacity::measure()

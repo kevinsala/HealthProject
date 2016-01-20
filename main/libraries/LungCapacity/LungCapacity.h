@@ -17,6 +17,7 @@ class LungCapacity
 
  public:
     LungCapacity(int reqCode);
+    void setup();
 	double measure();
 };
 
