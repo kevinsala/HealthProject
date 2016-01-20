@@ -104,6 +104,8 @@ void playRespiratoryRate()
   
   int c = respRate.measure();
   Serial.print("Temp: "); Serial.print(c);
+
+  bluetooth.sendData(RESPIRATORY_RATE_FUNC, c, true);
   
   ledmux.power_off();
   currentFunc = NO_FUNC;
@@ -129,12 +131,12 @@ void playEcg()
   while (!finished) {
     double valueRead = ecg.readValue();
     if (valueRead >= 1020) ++beats;
-    if (iterations % 50 == 0) {
+    /*if (iterations % 50 == 0) {
       if (bluetooth.getAction() == STOP_ACTION) {
         cancelled = true;
         break;
       }
-    }
+    }*/
 
     delay(20);
     totalTime = millis() - startTime;
@@ -166,9 +168,12 @@ void playTemperature()
   ledmux.power_on(6);
 
   tempsensor.shutdown_wake(0);
+  delay(15000);
   float c = tempsensor.readTempC();
   Serial.print("Temp: "); Serial.print(c);
   tempsensor.shutdown_wake(1);
+
+  bluetooth.sendData(TEMPERATURE_FUNC, c, true);
   
   ledmux.power_off();
   currentFunc = NO_FUNC;
@@ -181,6 +186,8 @@ void playOxygenSaturation()
   Serial.println("SPO2");
   double bloodoxy = spo2.measure();
   Serial.println(bloodoxy);
+
+  bluetooth.sendData(OXYGEN_SATURATION_FUNC, bloodoxy, true);
   
   ledmux.power_off();
   currentFunc = NO_FUNC;

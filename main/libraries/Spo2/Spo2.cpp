@@ -46,8 +46,8 @@ double Spo2::measure()
     Serial.print(" || IRLed: ");
     Serial.println(IRValue);
   }
-  double R = RedValue/IRValue;
-  double res = (int) (-22.6 * R + 95.852);
+  double R = (double) RedValue/ (double) IRValue;
+  double res = (double) -22.6 * R + 95.842;
   
   return res;
 }
