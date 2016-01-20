@@ -19,7 +19,7 @@ class RgbLed
     RgbLed(int dp, int lp, int ep, int cp);
     void setup();
 	void sendColor(long r, long g, long b);
-	void off();
+	void power_off();
 };
 
 #endif
