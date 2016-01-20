@@ -50,7 +50,7 @@ public class LungCapacityFragment extends CommonFragment {
 
     @Override
     public void startPressed() {
-        getMainActivity().startMeasurement(Utils.BLOOD_PRESSURE_FUNC);
+        getMainActivity().startMeasurement(Utils.LUNG_CAPACITY_FUNC);
     }
 
     @Override

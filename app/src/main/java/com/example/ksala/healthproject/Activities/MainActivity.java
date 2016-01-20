@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
+
 import com.example.ksala.healthproject.Bluetooth.*;
 import com.example.ksala.healthproject.Fragments.*;
 import com.example.ksala.healthproject.Fragments.ConcreteFragments.*;
@@ -99,27 +101,24 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
         Log.d(Utils.LOG_TAG, "Here1!");
 
-        if (type == BluetoothUtils.CONNECTION_STARTED_MSG)
+        if (type == BluetoothUtils.CONNECTION_STARTED_MSG) {
             bluetoothConnected = true;
+            Toast.makeText(this, "Connected to Arduino", Toast.LENGTH_SHORT).show();
+        }
         else if (type == BluetoothUtils.DATA_MSG || type == BluetoothUtils.DATA_END_MSG) {
             DataMessage data = (DataMessage) msg.obj;
             if (func == currentFunctionality) {
-                Log.d(Utils.LOG_TAG, "Here2!");
                 boolean finished = (type == BluetoothUtils.DATA_END_MSG);
-                Log.d(Utils.LOG_TAG, "Here3!");
                 CommonFragment fragment = (CommonFragment) fragments[func];
-                Log.d(Utils.LOG_TAG, "Here4!");
                 fragment.addData(data.x, data.y, finished);
 
-                Log.d(Utils.LOG_TAG, "Here5!");
-
                 if (finished) currentFunctionality = Utils.NO_FUNC;
-
-                Log.d(Utils.LOG_TAG, "Here6!");
             }
         }
-        else if (type == BluetoothUtils.CONNECTION_LOST_MSG)
+        else if (type == BluetoothUtils.CONNECTION_LOST_MSG) {
             bluetoothConnected = false;
+            Toast.makeText(this, "Connection lost. Wait...", Toast.LENGTH_SHORT).show();
+        }
         else return false;
 
         return true;
