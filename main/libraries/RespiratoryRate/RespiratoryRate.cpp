@@ -10,12 +10,11 @@
 
 RespiratoryRate::RespiratoryRate()
 {
-  _tempSensor = TempSensor();
 
 }
 
-void RespiratoryRate::setup() {
-  _tempSensor.setup();
+void RespiratoryRate::setup(TempSensor tempSensor) {
+	_tempSensor = tempSensor;
 }
 
 int RespiratoryRate::measure() {
@@ -23,7 +22,7 @@ int RespiratoryRate::measure() {
 	float tmpAmbient = singleMeasure();
 	unsigned long elapsed = 0, current, start = millis();
 	current = start;
-	while(respCount < 5 and elapsed > 30000) {
+	while(respCount < 5 and elapsed < 30000) {
 		float tmpCurr = singleMeasure();
 		if(tmpCurr - tmpAmbient > RespIncrease) 
 			++respCount;

@@ -43,7 +43,7 @@ TempSensor::TempSensor() {
 
 void TempSensor::setup()
 {
-  if(!begin(0x19)) {
+  if(!begin()) {
     Serial.println("Couldn't find MCP9808!");
   }
 }

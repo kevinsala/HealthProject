@@ -71,7 +71,7 @@ void setup() {
   ledmux.setup();
   spo2.setup();
   rgb_led.setup();
-  respRate.setup();
+  respRate.setup(tempsensor);
   lungCap.setup();
   ledmux.power_off();
 }
@@ -133,12 +133,6 @@ void playEcg()
   while (!finished) {
     double valueRead = ecg.readValue();
     if (valueRead >= 1020) ++beats;
-    /*if (iterations % 50 == 0) {
-      if (bluetooth.getAction() == STOP_ACTION) {
-        cancelled = true;
-        break;
-      }
-    }*/
 
     delay(20);
     totalTime = millis() - startTime;
@@ -177,7 +171,7 @@ void playTemperature()
   tempsensor.shutdown_wake(0);
   delay(15000);
   float c = tempsensor.readTempC();
-  Serial.print("Temp: "); Serial.print(c);
+  Serial.print("Temp: "); Serial.println(c);
   tempsensor.shutdown_wake(1);
 
   bluetooth.sendData(TEMPERATURE_FUNC, c, true);
