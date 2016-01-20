@@ -66,6 +66,7 @@ public abstract class CommonFragment extends AbstractFragment implements View.On
     public void mesurementEnded() {
         running = false;
         getMainActivity().setSwipeable(true);
+        restartButton.setVisibility(View.VISIBLE);
     }
 
     @Override
