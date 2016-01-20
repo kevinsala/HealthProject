@@ -29,6 +29,7 @@ int RespiratoryRate::measure() {
 			++respCount;
 		current=millis();
 		elapsed = current-start;
+		tmpLst = tmpCurr;
 	}
 	return int((respCount/elapsed)*60);
 }
