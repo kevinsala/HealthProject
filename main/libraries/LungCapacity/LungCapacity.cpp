@@ -28,7 +28,7 @@ double LungCapacity::measure()
 	// keep measuring until user has finished blowing
 	while(sMeasure > refPressure) {
 		// transform measure pressure to volume (L). Capacity = v * A * t * 1000
-		double sCapacity = sqrt(sMeasure) * 1096.7 * 50.2655 * 0.5 * 1000;
+		double sCapacity = sqrt(sMeasure/1.225) * 1096.7 * 50.2655 * 0.5 * 1000;
 		resCapacity += sCapacity;
 		//measure another sample
 		delay(1);
