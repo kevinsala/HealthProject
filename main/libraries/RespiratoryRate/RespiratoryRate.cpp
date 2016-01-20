@@ -21,9 +21,9 @@ void RespiratoryRate::setup() {
 int RespiratoryRate::measure() {
 	int res, respCount = 0;
 	float tmpAmbient = singleMeasure();
-	unsigned long elapsed, current, start = millis();
+	unsigned long elapsed = 0, current, start = millis();
 	current = start;
-	while(respCount < 5 & elapsed > 30000) {
+	while(respCount < 5 and elapsed > 30000) {
 		float tmpCurr = singleMeasure();
 		if(tmpCurr - tmpAmbient > RespIncrease) 
 			++respCount;
