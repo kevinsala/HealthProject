@@ -51,12 +51,9 @@ double Spo2::measure()
   
   
   res += 24;
-  /*
-  if(res > 100.0)
-    res = 100.0;
-  else if (res < 95.00)
-    res = 95.00;
-  */
+  
+  if ((res >= 96.6 && res <= 96.8) || (res < 93.0) || res >= 100)
+    res = 0;
 
   return res;
 }

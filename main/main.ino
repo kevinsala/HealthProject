@@ -71,6 +71,7 @@ void setup() {
   ledmux.setup();
   spo2.setup();
   rgb_led.setup();
+  rgb_led.power_off();
   respRate.setup(tempsensor);
   lungCap.setup();
   ledmux.power_off();
@@ -168,10 +169,11 @@ void playLungCapacity()
   rgb_led.sendColor(48, 372, 1000);
   delay(1000);
   double c = lungCap.measure();
-  Serial.print("LungCapacity: "); Serial.print(c);
+  Serial.print("LungCapacity: "); Serial.println(c);
 
   bluetooth.sendData(LUNG_CAPACITY_FUNC, c, true);
-  
+
+  rgb_led.power_off();
   ledmux.power_off();
   currentFunc = NO_FUNC;
 }
@@ -179,12 +181,22 @@ void playLungCapacity()
 void playTemperature()
 {
   ledmux.power_on(6);
-  rgb_led.sendColor(970, 848, 48);
+  rgb_led.sendColor(255, 165, 0);
   tempsensor.shutdown_wake(0);
   delay(15000);
   float c = tempsensor.readTempC();
   Serial.print("Temp: "); Serial.println(c);
   tempsensor.shutdown_wake(1);
+
+/*  float c;
+
+  tempsensor.shutdown_wake(0);
+  while (1) {
+    c = tempsensor.readTempC();
+    Serial.print("Temp: "); Serial.print(c); Serial.println(" ºC");
+    delay(100);
+  }  
+  tempsensor.shutdown_wake(1);*/
 
   bluetooth.sendData(TEMPERATURE_FUNC, c, true);
   
@@ -197,9 +209,8 @@ void playOxygenSaturation()
 {
   ledmux.power_on(7);
   rgb_led.sendColor(612, 72, 252);
-  Serial.println("SPO2");
   double bloodoxy = spo2.measure();
-  Serial.println(bloodoxy);
+  Serial.print("SPO2: "); Serial.println(bloodoxy);
 
   bluetooth.sendData(OXYGEN_SATURATION_FUNC, bloodoxy, true);
   

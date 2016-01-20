@@ -37,7 +37,7 @@ int RespiratoryRate::measure() {
 float RespiratoryRate::singleMeasure() {
   _tempSensor.shutdown_wake(0);
   float c = _tempSensor.readTempC();
-  Serial.print("Temp: "); Serial.print(c);
+  Serial.print("Temp: "); Serial.println(c);
   _tempSensor.shutdown_wake(1);
   return c;
 }
