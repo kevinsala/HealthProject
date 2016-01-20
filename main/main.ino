@@ -183,7 +183,7 @@ void playTemperature()
   tempsensor.shutdown_wake(0);
   delay(15000);
   float c = tempsensor.readTempC();
-  Serial.print("Temp: "); Serial.print(c);
+  Serial.print("Temp: "); Serial.println(c);
   tempsensor.shutdown_wake(1);
 
   bluetooth.sendData(TEMPERATURE_FUNC, c, true);
