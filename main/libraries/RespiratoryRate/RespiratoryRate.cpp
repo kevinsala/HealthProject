@@ -16,10 +16,10 @@ RespiratoryRate::RespiratoryRate()
 void RespiratoryRate::setup(TempSensor tempSensor) {
 	_tempSensor = tempSensor;
 }
-
+/*
 int RespiratoryRate::measure() {
 	int res, respCount = 0;
-	delay(10000);
+	delay(5000);
 	float tmpLst = singleMeasure();
 	unsigned long elapsed = 0, current, start = millis();
 	current = start;
@@ -32,12 +32,44 @@ int RespiratoryRate::measure() {
 		tmpLst = tmpCurr;
 	}
 	return int((respCount/elapsed)*60);
+}*/
+
+float RespiratoryRate::measure() {
+	int respCount = 0;
+	delay(5000);
+	float lastRead = singleMeasure();
+	bool goingUp = false;
+	unsigned long elapsed = 0, current, start = millis();
+	current = start;
+	while(respCount < 10 and elapsed < 30000) {
+		float tmpCurr = singleMeasure();
+		if (tmpCurr > lastRead && !goingUp) {
+			++respCount;
+			goingUp = true;
+			Serial.println("Respiracio!");
+		}
+		else if (tmpCurr < lastRead && goingUp) {
+			goingUp = false;
+			Serial.println("Baixant!");
+		}
+
+		lastRead = tmpCurr;
+
+		current=millis();
+		elapsed = current-start;
+	}
+
+	float totalTime = elapsed / (float) (1000.0 * 60.0);
+
+	float res = ((float) respCount / totalTime);
+	return res;
 }
 
 float RespiratoryRate::singleMeasure() {
   _tempSensor.shutdown_wake(0);
   float c = _tempSensor.readTempC();
   Serial.print("Temp: "); Serial.println(c);
+  delay(250);
   _tempSensor.shutdown_wake(1);
   return c;
 }

@@ -106,7 +106,7 @@ void playRespiratoryRate()
   ledmux.power_on(2);
   rgb_led.sendColor(0, 1023, 0); // GREEN
   
-  int c = respRate.measure();
+  float c = respRate.measure();
   Serial.print("RespiratoryRate: "); Serial.print(c);
 
   bluetooth.sendData(RESPIRATORY_RATE_FUNC, c, true);
@@ -182,21 +182,23 @@ void playTemperature()
 {
   ledmux.power_on(6);
   rgb_led.sendColor(255, 165, 0);
-  tempsensor.shutdown_wake(0);
+  /*tempsensor.shutdown_wake(0);
   delay(15000);
   float c = tempsensor.readTempC();
   Serial.print("Temp: "); Serial.println(c);
-  tempsensor.shutdown_wake(1);
-
-/*  float c;
-
-  tempsensor.shutdown_wake(0);
-  while (1) {
-    c = tempsensor.readTempC();
-    Serial.print("Temp: "); Serial.print(c); Serial.println(" ºC");
-    delay(100);
-  }  
   tempsensor.shutdown_wake(1);*/
+
+  float c;
+
+  
+  while (1) {
+    tempsensor.shutdown_wake(0);
+    c = tempsensor.readTempC();
+    Serial.print("Temp: "); Serial.print(c); Serial.println(" degrees");
+    delay(250);
+    tempsensor.shutdown_wake(1);
+  }
+  
 
   bluetooth.sendData(TEMPERATURE_FUNC, c, true);
   

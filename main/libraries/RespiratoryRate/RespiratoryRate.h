@@ -18,7 +18,7 @@ class RespiratoryRate
  public:
     RespiratoryRate();
     void setup(TempSensor tempSensor);
-	int measure();
+	float measure();
 };
 
 #endif
