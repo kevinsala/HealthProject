@@ -43,7 +43,7 @@ public class OxygenSaturationFragment extends CommonFragment {
     @Override
     public void addData(double x, double y, boolean finished) {
         if (finished) {
-            measurementTextView.setText(String.format( "%.1f %%", x));
+            measurementTextView.setText(String.format( "%.2f %%", x));
             mesurementEnded();
         }
     }

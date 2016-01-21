@@ -43,7 +43,7 @@ public class LungCapacityFragment extends CommonFragment {
     @Override
     public void addData(double x, double y, boolean finished) {
         if (finished) {
-            measurementTextView.setText(String.format( "%.1f mL", x));
+            measurementTextView.setText(String.format( "%.2f Litres", x));
             mesurementEnded();
         }
     }
