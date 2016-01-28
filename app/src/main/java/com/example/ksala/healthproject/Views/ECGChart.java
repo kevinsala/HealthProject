@@ -35,7 +35,7 @@ public class ECGChart {
 
     public void addData(double x, double y) {
 
-        if (y >= 850) ++beats;
+        if (y >= 950) ++beats;
         totalTime = (long) x;
 
         LineData data = mChart.getData();
