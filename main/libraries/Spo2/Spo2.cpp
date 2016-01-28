@@ -41,10 +41,10 @@ double Spo2::measure()
   
 
   if(debugMode) {
-    Serial.print("RedLed: ");
+    /*Serial.print("RedLed: ");
     Serial.print(RedValue);
     Serial.print(" || IRLed: ");
-    Serial.println(IRValue);
+    Serial.println(IRValue);*/
   }
   double R = (double) RedValue/ (double) IRValue;
   double res = (double) -22.6 * R + 95.842;
@@ -52,7 +52,7 @@ double Spo2::measure()
   
   res += 24;
   
-  if ((res >= 96.6 && res <= 96.8) || (res < 93.0) || res >= 100)
+  if ((res >= 96.6 && res <= 96.9) || (res < 93.0) || res >= 100)
     res = 0;
 
   return res;

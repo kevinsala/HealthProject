@@ -182,22 +182,21 @@ void playTemperature()
 {
   ledmux.power_on(6);
   rgb_led.sendColor(255, 165, 0);
-  /*tempsensor.shutdown_wake(0);
-  delay(15000);
+  tempsensor.shutdown_wake(0);
+  delay(20000);
   float c = tempsensor.readTempC();
   Serial.print("Temp: "); Serial.println(c);
-  tempsensor.shutdown_wake(1);*/
+  tempsensor.shutdown_wake(1);
 
-  float c;
-
-  
+/*  float c;
+   
   while (1) {
     tempsensor.shutdown_wake(0);
     c = tempsensor.readTempC();
     Serial.print("Temp: "); Serial.print(c); Serial.println(" degrees");
     delay(250);
     tempsensor.shutdown_wake(1);
-  }
+  }*/
   
 
   bluetooth.sendData(TEMPERATURE_FUNC, c, true);
