@@ -1,32 +1,34 @@
-# Projecte d'Enginyeria de Computadors
+:pill:  Arduino sensor interface
+====
 
-:pill: Health project build with Arduino. 
 
-## Features
-1. Anrdoid custom app.
-2. Communication with Android phone via Bluetooh.
-3. Electrocardiogram recording :chart_with_upwards_trend:
+## Interface Features
+1. Bluetooh communication protocol.
+3. Electrocardiogram generation :chart_with_upwards_trend:
 4. Body temperature measurement.
 5. Blood pressure measurement.
 6. SPO2 measurement.
-7. Lung capacity measurement.
-8. RGB LED.
+7. Respiratory rate measurement.
+8. Lung capacity measurement.
+9. ShiftBrite RGB LED control.
+10. Function LEDs control via *multiplexer*. 
 
-### To Do List
+### Progress
 
-- [x] Serial communication integration
-- [ ] SPO2
-  - [x] Measurement of sensor analog output
-  - [ ] Formula transformation to *spo2* percentage
-- [x] RGB Led Color picker
-- [x] LED control (**MUX**) for determining which feature is being used
-- [x] Bluetooh communication with Android
-- [x] Body temperature sensor
-- [ ] Respiratory rate
-- [ ] Lung capacity.
-  - [x] Read of the value
-  - [ ] Calculate the overall capacity
+- [x] Bluetooh communication protocol
 - [x] ECG
   - [x] Formula to compute the BPM
   - [x] Render the electrocardiography
+- [x] Body temperature sensor
 - [ ] Blood pressure
+- [x] SPO2
+  - [x] Measurement of sensor analog output
+  - [x] Formula transformation to *spo2* percentage
+- [x] Respiratory rate - with a temperature sensor
+- [x] Lung capacity
+  - [x] Read of an instant value
+  - [x] Calculate the overall capacity
+- [x] ShiftBrite RGB Led Color interface
+- [x] **MUX** for function LED control
+
+
