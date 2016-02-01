@@ -17,10 +17,10 @@ This project aims to design and implement a portable HealthCare equipment. For t
 * Bluetooth communication protocol between the hardware equipment and the application.
 * ShiftBrite RGB LED control.
 * Function LEDs control via _multiplexer_.
-* Needs an external input voltatge (10V, -5V and GND input)
+* Needs an external input voltatge (10V, -5V and GND input).
 
 ## Android Application
-The next pictures shows the Android application and its friendly user interface. It has a page and instructions for each health functionality and a Bluetooth communication protocol, totally transparent to user. The application Project is located in the ['Android' folder](https://github.com/kevinsala/HealthProject/tree/master/Android)
+The next pictures shows the Android application and its friendly user interface. It has a page and instructions for each health functionality and a Bluetooth communication protocol, totally transparent to user. The application Project is located in the ['Android' folder](https://github.com/kevinsala/HealthProject/tree/master/Android).
 
 ![Main page](https://cloud.githubusercontent.com/assets/7224381/12695507/c0be4e9c-c750-11e5-9e37-5c61616f7aed.jpg)
 
@@ -31,7 +31,7 @@ _Menu of the Android application_
 _Electrocardiography page of the Android application_
 
 ## Shield Design
-The custom shield has been designed with [CadSoft EAGLE](http://www.cadsoftusa.com/) software. This design is completely functional and it has been tested. All related files are included in the ['Shield' folder](https://github.com/kevinsala/HealthProject/tree/master/Shield)
+The custom shield has been designed with [CadSoft EAGLE](http://www.cadsoftusa.com/) software. This design is completely functional and it has been tested. All related files are included in the ['Shield' folder](https://github.com/kevinsala/HealthProject/tree/master/Shield).
 
 ### Functional Block Diagram
 The next figure represents the functional block diagram of the designed equipment.
